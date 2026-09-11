@@ -1,0 +1,84 @@
+<% if (success && success.length > 0) { %>
+  <div class="flashContainer">
+    <div class="flash flashSuccess" role="alert">
+      <span class="flashIcon">✓</span>
+      <span class="flashMessage"><%= success %></span>
+      <button class="flashCloseBtn" onclick="this.closest('.flash').remove()">&times;</button>
+    </div>
+  </div>
+<% } %>
+<% if (typeof error !== "undefined" && error && error.length > 0) { %>
+  <div class="flashContainer">
+    <div class="flash flashError" role="alert">
+      <span class="flashIcon">✕</span>
+      <span class="flashMessage"><%= error %></span>
+      <button class="flashCloseBtn" onclick="this.closest('.flash').remove()">&times;</button>
+    </div>
+  </div>
+<% } %>
+
+<style>
+.flashContainer {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 60;
+  width: 90%;
+  max-width: 420px;
+  pointer-events: none;
+}
+
+.flash {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  animation: flashSlideIn 0.3s ease forwards, flashFadeOut 0.4s ease 4s forwards;
+}
+
+.flashSuccess {
+  background: var(--emerald-50);
+  color: var(--emerald-700);
+  border: 1px solid var(--emerald-100);
+}
+
+.flashError {
+  background: #fef2f2;
+  color: var(--red-500);
+  border: 1px solid #fecaca;
+}
+
+.flashIcon { font-weight: 800; }
+.flashMessage { flex: 1; }
+
+.flashCloseBtn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  color: inherit;
+  opacity: 0.6;
+  font-family: inherit;
+}
+
+.flashCloseBtn:hover { opacity: 1; }
+
+@keyframes flashSlideIn {
+  from { opacity: 0; transform: translateY(-15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes flashFadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; visibility: hidden; }
+}
+</style>

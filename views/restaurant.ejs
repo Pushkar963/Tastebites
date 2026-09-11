@@ -1,0 +1,395 @@
+<% layout("/layouts/boilerplate") %>
+<body>
+    <!-- ================= CONTENT ================= -->
+    <div id="menuContent">
+
+        <!-- Breadcrumb -->
+        <div id="breadcrumb">
+            <a href="/tastebite" class="crumb">Home</a>
+            <span class="crumbSep">/</span>
+            <!-- <a href="#" class="crumb"><%= restaurant.address.city %></a>
+            <span class="crumbSep">/</span> -->
+            <span class="crumb current"><%= restaurant.name %></span>
+        </div>
+
+        <!-- Title + tabs -->
+        <div id="restaurantTitleRow">
+            <h1 id="restaurantTitle"><%= restaurant.name %></h1>
+            <% if (currUser && currUser._id.equals(restaurant.ownerId._id)) { %>
+                <a href="/tastebite/restaurants/<%= restaurant._id %>/edit" id="editRestaurantBtn">Edit Restaurant</a>
+            <% } %>
+        </div>
+
+        <div id="orderTabs">
+            <div class="orderTab active">Order Online</div>
+            <div class="orderTab">Dineout</div>
+        </div>
+
+        <!-- Hero image -->
+        <div id="restaurantBanner">
+            <img src="<%= restaurant.imageURL.url %>" alt="<%= restaurant.name %>" id="bannerImage">
+            <div id="bannerOverlay">
+                <div id="bannerName"><%= restaurant.name %></div>
+                <div id="bannerCuisine">
+                    <% for(cuisine of restaurant.cuisines){ %>
+                        <span><%= cuisine %></span>
+                        <% if(restaurant.cuisines.indexOf(cuisine) < restaurant.cuisines.length - 1) {%>
+                            <span>•</span>
+                        <% } %>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rating / price / cuisine / status row -->
+        <div id="restaurantMetaRow">
+            <span class="metaRating"><span class="starIcon"></span> <%= restaurant.rating %> (<%= restaurant.numRatings%>+ ratings)</span>
+            <span class="metaDot">•</span>
+            <span class="metaPrice">$25 for two</span>
+        </div>
+        <div id="restaurantTagsRow">
+            <% for(cuisine of restaurant.cuisines){ %>
+                <a href="#" class="cuisineTag"><%= cuisine %></a>
+            <% } %>
+        </div>
+        <div id="restaurantStatusRow">
+            <% if(restaurant.isOpen){ %>
+                <span class="statusOpen">Open now</span>
+            <% } else { %>
+                <span class="statusClose">Closed</span>
+            <% } %>
+            <span class="metaDot">•</span>
+            <span class="statusHours">Closes 11:00 pm</span>
+        </div>
+
+        <!-- Info bar (delivery specifics) -->
+        <div id="restaurantInfoBar">
+            <span class="infoItem"><span class="truckIcon"></span> Delivery fee $2.99</span>
+            <span class="infoItem"><span class="clockIcon"></span> 30-40 min</span>
+            <span class="infoItem"><span class="pinIcon"></span> <%= restaurant.address.streetAddress %>, <%= restaurant.address.landmark %></span>
+        </div>
+
+        <!-- ============ Deals for you ============ -->
+        <div id="dealsSection">
+            <div class="shelfHead">
+                <div class="sectionHeader small">Deals For You</div>
+                <div id="dealsNav">
+                    <div class="shelfNavBtn">&larr;</div>
+                    <div class="shelfNavBtn">&rarr;</div>
+                </div>
+            </div>
+            <div class="shelf">
+                <div class="shelfCards">
+                    <div class="dealCard">
+                        <div class="dealIcon"></div>
+                        <div class="dealInfo">
+                            <div class="dealTitle">Extra $2 Off</div>
+                            <div class="dealSubtitle">No code required | Above $10</div>
+                        </div>
+                    </div>
+                    <div class="dealCard">
+                        <div class="dealIcon"></div>
+                        <div class="dealInfo">
+                            <div class="dealTitle">50% Off Upto $15</div>
+                            <div class="dealSubtitle">Use SAVE50</div>
+                        </div>
+                    </div>
+                    <div class="dealCard">
+                        <div class="dealIcon"></div>
+                        <div class="dealInfo">
+                            <div class="dealTitle">Free Delivery</div>
+                            <div class="dealSubtitle">On orders above $20</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search dishes -->
+        <div id="dishSearchBar">
+            <span class="searchIcon"></span>
+            <input type="text" placeholder="Search for dishes">
+        </div>
+
+        <!-- Filter pills -->
+        <div id="dishFilterBar">
+            <div class="dishFilterPill veg">Pure Veg</div>
+            <div class="dishFilterPill">Bestseller</div>
+            <div class="dishFilterPill">Surplus</div>
+        </div>
+
+        <!-- ============ Recommended dishes ============ -->
+        <div id="menuSection">
+            <div class="shelfHead">
+                <div class="sectionHeader small">Recommended (12)</div>
+                <div class="menuHeadActions">
+                    <a href="/tastebite/restaurants/<%= restaurant._id %>/foods/new" id="addFoodBtn">+ Add Food</a>
+                    <div class="collapseArrow">&and;</div>
+                </div>
+            </div>
+
+            <div id="menuList">
+
+                <% for(food of foods) { %>
+                        <div class="menuItem">
+                            <a href="/tastebite/restaurants/<%= restaurant._id %>/foods/<%= food._id %>/edit" class="editFoodBtn">Edit</a>
+                            <div class="menuItemInfo">
+                                <span class="vegDot"></span>
+                                <div class="menuItemNameRow">
+                                    <span class="menuItemName"> <%= food.name %> </span>
+                                </div>
+                                <div class="menuItemPriceRow">
+                                    <span class="menuItemPrice"> <%= food.price %> </span>
+                                </div>
+                                <div class="menuItemRating"><span class="starIcon"></span> 4.5 (663)</div>
+                                <div class="menuItemDesc"><%= food.description %></div>
+                            </div>
+                            <div class="menuItemImageWrap">
+                                <div class="menuItemImage"></div>
+                                <button class="addToCartBtn floating">ADD</button>
+                            </div>
+                        </div>
+                <% } %>
+
+                <div class="menuItem surplus">
+                    <div class="menuItemInfo">
+                        <span class="vegDot"></span>
+                        <div class="menuItemNameRow">
+                            <span class="menuItemName">Yesterday's Bake Surplus Pizza</span>
+                            <span class="surplusBadge">Surplus Item</span>
+                        </div>
+                        <div class="menuItemPriceRow">
+                            <span class="menuItemOriginalPrice">$13.00</span>
+                            <span class="menuItemPrice discounted">$6.50</span>
+                        </div>
+                        <div class="menuItemRating"><span class="starIcon"></span> 4.3 (1.5K+)</div>
+                        <div class="menuItemDesc">Fresh-baked today, discounted before close. Serves 1.</div>
+                    </div>
+                    <div class="menuItemImageWrap">
+                        <div class="menuItemImage"></div>
+                        <button class="addToCartBtn floating">ADD</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="viewFullMenuLink">View full menu &darr;</div>
+        </div>
+
+        <!-- ============ Related restaurants ============ -->
+        <div id="relatedSection">
+            <div class="sectionHeader">Related to <%= restaurant.name %></div>
+            <div class="shelf">
+                <div class="shelfCards">
+                    <div class="restaurantCard">
+                        <div class="restaurantImage patty">
+                            <div class="restaurantRatingBadge"><span class="starIcon"></span> 4.6</div>
+                            <div class="restaurantImageOverlay">
+                                <div class="restaurantOverlayName">Patty &amp; Co.</div>
+                            </div>
+                        </div>
+                        <div class="restaurantInfo">
+                            <div class="restaurantInfoRow">Burgers • American</div>
+                            <div class="restaurantInfoRow muted">Downtown</div>
+                        </div>
+                    </div>
+                    <div class="restaurantCard">
+                        <div class="restaurantImage crumb">
+                            <div class="restaurantRatingBadge"><span class="starIcon"></span> 4.9</div>
+                            <div class="restaurantImageOverlay">
+                                <div class="restaurantOverlayName">The Daily Crumb</div>
+                            </div>
+                        </div>
+                        <div class="restaurantInfo">
+                            <div class="restaurantInfoRow">Bakery • Pastries</div>
+                            <div class="restaurantInfoRow muted">Market Row</div>
+                        </div>
+                    </div>
+                    <div class="restaurantCard">
+                        <div class="restaurantImage sunrise">
+                            <div class="restaurantRatingBadge"><span class="starIcon"></span> 4.5</div>
+                            <div class="restaurantImageOverlay">
+                                <div class="restaurantOverlayName">Sunrise Deli</div>
+                            </div>
+                        </div>
+                        <div class="restaurantInfo">
+                            <div class="restaurantInfoRow">Sandwiches • Cafe</div>
+                            <div class="restaurantInfoRow muted">Baker Street</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============ About ============ -->
+        <div id="aboutSection">
+            <div class="sectionHeader">About <%= restaurant.name %></div>
+            <div id="aboutCard">
+                <div class="aboutCardTitle">Best-Selling Dishes at <%= restaurant.name %></div>
+                <p class="aboutCardText">
+                    <%= restaurant.description %>
+                </p>
+                <div class="aboutDishName">Margherita Pizza</div>
+                <div id="aboutSeeMore">See more &darr;</div>
+            </div>
+        </div>
+
+
+
+                <!-- ============ REVIEWS LIST ============ -->
+        <div id="reviewsListSection">
+            <div class="sectionHeader">Reviews</div>
+
+            <!-- Summary -->
+            <div id="reviewSummary">
+                <div id="reviewScores">
+                <div id="reviewAverageScore"><%= reviews.length == 0 ? "No Reviews Yet" : avgRating  %></div>
+                <div id="reviewSummaryDetails">
+                    <div id="reviewSummaryStars">
+                        <% for (let i=0; i < avgStar; i++) { %>
+                                <span>★</span>
+                        <% } %>
+                    </div>
+                    <div id="reviewSummaryCount"> <%= reviews.length > 0 ? `Based on  ${reviews.length} reviews` : "" %> </div>
+                </div>
+                </div>
+                <% if (currUser) { %>
+                    <button id="writeReviewBtn">Write a review</button>
+                <% } %>
+            </div>
+
+            <!-- List -->
+            <% if (reviews.length > 0) { %>    
+            <div id="reviewList">
+                    <% for (review of reviews) { %>
+                        <div class="reviewCard">
+                            <div class="reviewAvatar">A</div>
+                            <div class="reviewCardBody">
+                                <div class="reviewCardTop">
+                                    <div class="reviewerName"><%= review.reviewerName.username %></div>
+                                    
+                                    <div class="reviewTimestamp"><%= getRelativeTime(review.createdAt) %></div>
+                                    <form action="/tastebite/restaurants/<%= restaurant._id %>/reviews/<%= review._id %>?_method=DELETE" method="POST" class="reviewDeleteForm">
+                                        <button class="deleteBtn">Delete</button>
+                                    </form>
+                                </div>
+                                <div class="reviewStars">
+                                    <% for (let i=0; i < review.rating; i++) { %>
+                                        <span>★</span>
+                                    <% } %>
+                                </div>
+                                <div class="reviewComment"><%= review.comment %></div>
+                            </div>
+                        </div>
+                        <% } %>
+                    </div>
+                    <div class="reviewListActions">
+                        <button id="loadMoreBtn" style="display: <%= reviews.length > 5 ? 'inline-block' : 'none' %>;">See more</button>
+                        <button id="seeLessBtn">See few</button>
+                    </div>
+                <% } else { %>
+                        <!-- Empty state (shown only when there are 0 reviews) -->
+                        <div id="reviewsEmptyState">
+                            <div id="reviewsEmptyIcon"></div>
+                            <div id="reviewsEmptyText">No reviews yet — be the first to review!</div>
+                        </div>
+                <% } %>
+
+        </div>
+
+
+
+
+
+
+        <!-- ============ FAQs ============ -->
+        <div id="faqSection">
+            <div class="sectionHeader">FAQs about <%= restaurant.name %></div>
+
+            <div class="faqItem open">
+                <div class="faqQuestion">
+                    Does <%= restaurant.name %> deliver on TasteBites?
+                    <span class="faqArrow">&and;</span>
+                </div>
+                <div class="faqAnswer">Yes, <%= restaurant.name %> delivers through TasteBites. Order online for doorstep delivery.</div>
+            </div>
+            <div class="faqItem">
+                <div class="faqQuestion">
+                    What is<%= restaurant.name %> known for?
+                    <span class="faqArrow">&or;</span>
+                </div>
+            </div>
+            <div class="faqItem">
+                <div class="faqQuestion">
+                    Does <%= restaurant.name %> offer vegetarian options?
+                    <span class="faqArrow">&or;</span>
+                </div>
+            </div>
+            <div class="faqItem">
+                <div class="faqQuestion">
+                    How can I order from <%= restaurant.name %> online?
+                    <span class="faqArrow">&or;</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============ Disclaimer ============ -->
+        <div id="disclaimerSection">
+            <div class="sectionHeader small">Disclaimer</div>
+            <ul id="disclaimerList">
+                <li>All prices are set directly by the restaurant.</li>
+                <li>Nutritional information is indicative and may vary by ingredients and portion size.</li>
+                <li>An average active adult requires 2,000 kcal per day; individual needs may vary.</li>
+            </ul>
+            <div id="licenseRow">
+                <span class="licenseBadge">FSSAI</span>
+                <span class="licenseText">License No. 11216333001232</span>
+            </div>
+        </div>
+
+    </div>
+    
+
+    <% if (currUser) { %>
+    <button id="floatingReviewBtn">
+        <span>&#9998;</span> Write a review
+    </button>
+    <% } %>
+
+    <% if (currUser) { %>
+    <div id="reviewModalOverlay">
+        <div id="reviewModalPanel">
+            <button id="closeReviewModal">&times;</button>
+
+            <form method="POST" action="/tastebite/restaurants/<%= restaurant._id %>/reviews" id="reviewForm" novalidate>
+            <div class="sectionHeader" style="font-size:16px; margin-bottom:12px;">Write a review</div>
+
+
+            <div class="reviewFormInputs" style="margin-top:12px;">
+                
+                <label class="formLabel">Rating</label>
+                <div id="starRatingInput" style="margin-top:6px;">
+                <input type="radio" name="review[rating]" value="5" id="star5" required><label for="star5" class="starLabel">★</label>
+                <input type="radio" name="review[rating]" value="4" id="star4" required><label for="star4" class="starLabel">★</label>
+                <input type="radio" name="review[rating]" value="3" id="star3" required><label for="star3" class="starLabel">★</label>
+                <input type="radio" name="review[rating]" value="2" id="star2" required><label for="star2" class="starLabel">★</label>
+                <input type="radio" name="review[rating]" value="1" id="star1" required><label for="star1" class="starLabel">★</label>
+                </div>
+                <div class="fieldError" id="ratingError">Please select a rating.</div>
+            </div>
+
+            <div class="reviewFormInputs" style="margin-top:12px;">
+                <label class="formLabel">Comment</label>
+                <textarea class="formTextarea" id="commentInput"  name="review[comment]" rows="3" placeholder="Share your experience..." style="width:100%; margin-top:6px;" required></textarea>
+                <div class="fieldError" id="commentError">Please write a review</div>
+            </div>
+
+            <button type="submit" id="submitReviewBtn" style="margin-top:14px;">Post review</button>
+            </form>
+        </div>
+    </div>
+    <% } %>
+
+    <script src="/js/script.js"></script>
+    <script src="/js/validate.js"></script>
+</body>
+

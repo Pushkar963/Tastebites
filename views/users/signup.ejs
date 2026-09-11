@@ -1,0 +1,172 @@
+<% layout("/layouts/boilerplate") %>
+<style>
+  :root {
+    --orange-500: #f97316;
+    --orange-600: #ea580c;
+    --emerald-600: #059669;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-500: #78716c;
+    --stone-600: #57534e;
+    --stone-800: #292524;
+    --stone-900: #1c1917;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+  }
+
+  #signupContent {
+    max-width: 480px;
+    margin: 40px auto;
+    padding: 24px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+
+  #signupTitle {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--stone-900);
+    margin-bottom: 4px;
+  }
+
+  #signupSubtitle {
+    font-size: 14px;
+    color: var(--stone-500);
+    margin-bottom: 24px;
+  }
+
+  #signupForm {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .formRow {
+    display: flex;
+    gap: 16px;
+  }
+
+  .formRow .formGroup { flex: 1; }
+
+  .formLabel {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--stone-600);
+  }
+
+  .formInput {
+    border: 1px solid var(--stone-200);
+    border-radius: var(--radius-md);
+    padding: 10px 14px;
+    font-size: 14px;
+    color: var(--stone-800);
+    background: #fff;
+    outline: none;
+    font-family: inherit;
+  }
+
+  .formInput:focus { border-color: var(--orange-500); }
+
+  .optionalTag { font-weight: 400; color: var(--stone-500); }
+
+  #submitSignupBtn {
+    background: var(--orange-500);
+    color: #fff;
+    border: none;
+    font-size: 15px;
+    font-weight: 700;
+    padding: 13px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    font-family: inherit;
+    margin-top: 8px;
+  }
+
+  #submitSignupBtn:hover { background: var(--orange-600); }
+
+  #loginRedirectText {
+    text-align: center;
+    font-size: 13px;
+    color: var(--stone-500);
+    margin-top: 16px;
+  }
+
+  #loginRedirectText a { color: var(--emerald-600); font-weight: 700; text-decoration: none; }
+</style>
+
+<div id="signupContent">
+
+  <div id="signupTitle">Create your account</div>
+  <div id="signupSubtitle">Join TasteBites to order and rescue great food.</div>
+
+  <form action="/tastebite/signup" method="POST" id="signupForm" novalidate>
+
+    <!-- username (added by passport-local-mongoose) -->
+    <div class="formGroup">
+      <label class="formLabel">Username</label>
+      <input type="text" class="formInput" name="username" placeholder="e.g. jordan_lee" required>
+      <span class="fieldError">Please enter a username.</span>
+    </div>
+
+    <!-- email -->
+    <div class="formGroup">
+      <label class="formLabel">Email</label>
+      <input type="email" class="formInput" name="user[email]" placeholder="e.g. jordan@example.com" required>
+      <span class="fieldError">Please enter a valid email.</span>
+    </div>
+
+    <!-- password (added by passport-local-mongoose) -->
+    <div class="formGroup">
+      <label class="formLabel">Password</label>
+      <input type="password" class="formInput" name="password" placeholder="At least 8 characters" minlength="8" required>
+      <span class="fieldError">Password must be at least 8 characters.</span>
+    </div>
+
+    <!-- phoneNumber -->
+    <div class="formGroup">
+      <label class="formLabel">Phone Number</label>
+      <input type="tel" class="formInput" name="user[phoneNumber]" placeholder="e.g. 9800000000" required>
+      <span class="fieldError">Please enter a phone number.</span>
+    </div>
+
+    <!-- address -->
+    <div class="formGroup">
+      <label class="formLabel">Street Address</label>
+      <input type="text" class="formInput" name="user[address][streetAddress]" placeholder="e.g. 12 Market Row" required>
+      <span class="fieldError">Please enter you a street address.</span>
+    </div>
+
+    <div class="formRow">
+      <div class="formGroup">
+        <label class="formLabel">City</label>
+        <input type="text" class="formInput" name="user[address][city]" placeholder="e.g. Kathmandu" required>
+        <span class="fieldError">Please enter a city.</span>
+      </div>
+      <div class="formGroup">
+        <label class="formLabel">Pincode</label>
+        <input type="text" class="formInput" name="user[address][pincode]" placeholder="e.g. 44600" required>
+        <span class="fieldError">Please enter a pincode.</span>
+
+      </div>
+    </div>
+
+    <div class="formGroup">
+      <label class="formLabel">Landmark <span class="optionalTag">(optional)</span></label>
+      <input type="text" class="formInput" name="user[address][landmark]" placeholder="e.g. Near City Mall">
+    </div>
+
+    <button type="submit" id="submitSignupBtn">Create Account</button>
+
+  </form>
+
+  <div id="loginRedirectText">Already have an account? <a href="/tastebite/login">Log in</a></div>
+
+</div>
+<script src="/js/validate.js"></script>

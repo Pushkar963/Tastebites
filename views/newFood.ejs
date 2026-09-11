@@ -1,0 +1,111 @@
+<% layout("/layouts/boilerplate") %>
+<body>
+
+    <!-- ================= CONTENT ================= -->
+    <div id="formContent">
+
+        <a href="/tastebite/restaurants/<%= restaurant._id %>" id="backLink">&larr; Back to <%= restaurant.name %></a>
+
+        <div id="formHeader">
+            <div id="formTitle">Add a Food Item</div>
+            <div id="formSubtitle">This dish will be added to <%= restaurant.name %> menu.</div>
+        </div>
+
+        <form action="/tastebite/restaurants/<%= restaurant._id %>/foods" method="POST" id="foodForm" novalidate>
+
+            <!-- Image upload -->
+            <div class="formGroup">
+                <label class="formLabel">Dish Image</label>
+                <div id="imageUploadBox">
+                    <div id="imageUploadIcon"></div>
+                    <div id="imageUploadText">Click to upload or drag an image here</div>
+                    <input type="file" id="foodImageInput" accept="image/*" name="menuItem[imageUrl]">
+                </div>
+            </div>
+
+            <!-- Name -->
+            <div class="formGroup">
+                <label class="formLabel">Dish Name</label>
+                <input type="text" class="formInput" id="foodNameInput" placeholder="e.g. Margherita Pizza" name="menuItem[name]" required>
+                <span class="fieldError">Please enter dish name.</span>
+                <span class="fieldSuccess">Dish name looks good</span>
+
+            </div>
+
+            <!-- Category -->
+            <div class="formGroup">
+                <label class="formLabel">Category</label>
+                <input type="text" class="formInput" id="foodCategoryInput" placeholder="e.g. Pizza, Dessert, Beverage" name="menuItem[category]" required>
+                <span class="fieldError">Please enter category of the dish.</span>
+                <span class="fieldSuccess">Yummy! Got variety</span>
+            </div>
+
+            <!-- Food type (matches schema enum: VEG / NON-VEG / EGG) -->
+            <div class="formGroup">
+                <label class="formLabel">Food Type</label>
+                <div id="vegToggleGroup">
+                    <label class="vegOption">
+                        <input type="radio" name="menuItem[foodType]" value="VEG" required>
+                        <span class="vegDot"></span> Veg  
+                    </label>
+                    <label class="vegOption">
+                        <input type="radio" name="menuItem[foodType]" value="NON-VEG" required>
+                        <span class="nonVegDot"></span> Non-Veg
+                    </label>
+                    <label class="vegOption">
+                        <input type="radio" name="menuItem[foodType]" value="EGG" required>
+                        <span class="eggDot"></span> Egg
+                    </label>
+                </div>
+                <span class="fieldError">Please select a food type.</span>
+                <span class="fieldSuccess">Food type cannot distinguish your customers</span>
+            </div>
+
+            <!-- Price -->
+            <div class="formGroup">
+                <label class="formLabel">Price</label>
+                <input type="text" step="0.01" class="formInput" id="foodPriceInput" placeholder="e.g. 14.00" name="menuItem[price]" required>
+                <span class="fieldError">Please enter price of the dish.</span>
+                <span class="fieldSuccess">Reasonable Price</span>
+            </div>
+
+            <!-- Description -->
+            <div class="formGroup">
+                <label class="formLabel">Description <span class="optionalTag">(optional)</span></label>
+                <textarea class="formTextarea" id="foodDescInput" rows="4" placeholder="Ingredients, preparation style, what makes it worth ordering" name="menuItem[description]" required></textarea>
+                <span class="fieldError">Please enter the description of the dish.</span>
+                <span class="fieldSuccess">Description of your dish looks amazing</span>
+            </div>
+
+            <!-- isPerishable -->
+            <div class="formGroup">
+                <label id="isPerishableRow">
+                    <input type="checkbox" id="foodPerishableCheckbox" name="menuItem[isPerishable]">
+                    <span id="isPerishableLabel">This item is perishable (subject to same-day surplus discounting)</span>
+                </label>
+            </div>
+
+            <!-- Discounted price (optional, only meaningful if perishable/surplus) -->
+            <div class="formGroup">
+                <label class="formLabel">Discounted Price <span class="optionalTag">(optional)</span></label>
+                <input type="number" step="0.01" class="formInput" id="foodDiscountPriceInput" placeholder="e.g. 6.50" name="menuItem[discountedPrice]">
+            </div>
+
+            <!-- isAvailable -->
+            <div class="formGroup">
+                <label id="isAvailableRow">
+                    <input type="checkbox" id="foodAvailableCheckbox" name="menuItem[isAvailable]" checked>
+                    <span id="isAvailableLabel">Available for order right now</span>
+                </label>
+            </div>
+
+            <div id="formActions">
+                <div id="cancelFormBtn">Cancel</div>
+                <button type="submit" id="submitFormBtn">Add Food Item</button>
+            </div>
+
+        </form>
+
+    </div>
+    <script src="/js/validate.js"></script>
+</body>

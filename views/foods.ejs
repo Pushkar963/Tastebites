@@ -1,0 +1,161 @@
+<% layout("/layouts/boilerplate") %>
+
+<body>
+
+    <!-- ================= CONTENT ================= -->
+    <div id="content">
+
+        <a href="/tastebite" id="backLink">&larr; Back to Home</a>
+
+        <div id="allFoodsHeader">
+            <div class="sectionHeader">All Foods</div>
+            <div id="allFoodsCount"><%= foods.length %> dishes</div>
+        </div>
+
+        <!-- Filter pills (reuses your existing categoryPill style) -->
+        <div id="categoryFilterBar">
+            <div class="categoryPill active" data-category="all">All</div>
+            <div class="categoryPill" data-category="burgers">Burgers</div>
+            <div class="categoryPill" data-category="pizza">Pizza</div>
+            <div class="categoryPill" data-category="healthy">Healthy</div>
+            <div class="categoryPill" data-category="bakery">Bakery</div>
+            <div class="categoryPill" data-category="surplus">Perishable Surplus</div>
+        </div>
+
+        <!-- ============ FOOD GRID ============ -->
+        <div id="allFoodsGrid">
+            <!-- Food from backend -->
+            <% for(food of foods) { %>
+                <button class="foodCard" data-id="<%= food._id %>">
+                    <div class="foodImage">
+                        <span class="foodBadge">Bestseller</span>
+                        <div class="quickAddBtn">+</div>
+                    </div>
+                    <div class="foodCardContent">
+                        <div class="foodName"><%= food.name %></div>
+                        <div class="foodRestaurant"><%= food.restaurantId.name%></div>
+                        <div class="foodPriceRow">
+                            <span class="foodPrice">$<%= food.price %></span>
+                        </div>
+                    </div>
+                </button>
+            <% } %>
+
+            <div class="foodCard">
+                <div class="foodImage">
+                    <span class="foodBadge">🔥 Trending</span>
+                    <div class="quickAddBtn">+</div>
+                </div>
+                <div class="foodCardContent">
+                    <div class="foodName">Cheesy Farmhouse Pizza</div>
+                    <div class="foodRestaurant">Napoli Slice House</div>
+                    <div class="foodPriceRow">
+                        <span class="foodPrice">$8.50</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="foodCard">
+                <div class="foodImage">
+                    <span class="foodBadge">Ordered 230x today</span>
+                    <div class="quickAddBtn">+</div>
+                </div>
+                <div class="foodCardContent">
+                    <div class="foodName">Classic Smash Burger</div>
+                    <div class="foodRestaurant">Patty &amp; Co.</div>
+                    <div class="foodPriceRow">
+                        <span class="foodPrice">$10.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="foodCard surplus">
+                <div class="foodImage">
+                    <span class="foodBadge surplusBadge">Only 3 left</span>
+                    <div class="quickAddBtn">+</div>
+                </div>
+                <div class="foodCardContent">
+                    <div class="foodName">Rescued Sourdough Loaf</div>
+                    <div class="foodRestaurant">The Daily Crumb</div>
+                    <div class="foodPriceRow">
+                        <span class="foodOriginalPrice">$7.00</span>
+                        <span class="foodPrice discounted">$3.50</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="foodCard">
+                <div class="foodImage">
+                    <span class="foodBadge">Bestseller</span>
+                    <div class="quickAddBtn">+</div>
+                </div>
+                <div class="foodCardContent">
+                    <div class="foodName">Molten Chocolate Cake</div>
+                    <div class="foodRestaurant">Sweet Tooth</div>
+                    <div class="foodPriceRow">
+                        <span class="foodPrice">$5.50</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="foodCard">
+                <div class="foodImage">
+                    <span class="foodBadge">🔥 Trending</span>
+                    <div class="quickAddBtn">+</div>
+                </div>
+                <div class="foodCardContent">
+                    <div class="foodName">Paneer Tikka Wrap</div>
+                    <div class="foodRestaurant">Green Bowl Kitchen</div>
+                    <div class="foodPriceRow">
+                        <span class="foodPrice">$7.25</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Empty state (shown when a filter/search returns nothing) -->
+        <div id="allFoodsEmptyState">
+            <div id="allFoodsEmptyIcon"></div>
+            <div id="allFoodsEmptyText">No dishes found</div>
+        </div>
+
+    </div>
+
+            <!-- ================= FOOD DETAIL MODAL (hidden by default) ================= -->
+    <div id="foodDetailModal">
+        <div id="foodDetailOverlay"></div>
+        <div id="foodDetailPanel">
+
+            <button id="foodDetailCloseBtn">&times;</button>
+
+            <div id="foodDetailImage"></div>
+
+            <div id="foodDetailBody">
+                <div id="foodDetailName"></div>
+                <div id="foodDetailRestaurant"></div>
+                <div id="foodDetailDesc"></div>
+
+                <div id="foodDetailPriceRow">
+                    <span id="foodDetailOriginalPrice"></span>
+                    <span id="foodDetailPrice"></span>
+                </div>
+
+                <div id="foodDetailQty">
+                    <div class="qtyMinusBtn" id="foodDetailQtyMinus">-</div>
+                    <span class="qtyValue" id="foodDetailQtyValue">1</span>
+                    <div class="qtyPlusBtn" id="foodDetailQtyPlus">+</div>
+                </div>
+
+                <div id="foodDetailAddBtn">Add to Cart</div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const menuItems =  <%- JSON.stringify(foods) %>;
+    </script>
+
+    <script src="/js/script.js"></script>
+</body>

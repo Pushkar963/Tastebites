@@ -1,0 +1,418 @@
+<% layout("/layouts/boilerplate") %>
+
+
+<body>
+    <!-- ================= CONTENT ================= -->
+    <div id="content">
+
+        <!-- Hero / Surplus Hour Banner -->
+        <div id="heroBanner">
+            <div id="heroIcon"></div>
+            <div id="heroText">
+                <div id="heroTag">Surplus Hour</div>
+                <div id="heroTitle">50% OFF Daily Restaurant Food Savings</div>
+                <div id="heroSubtitle">Today's freshest deals, going fast. Grab it before it's gone.</div>
+            </div>
+            <div id="heroTimer">
+                <span class="timerIcon"></span>
+                <span class="timerText">Ends in 01h 45m</span>
+            </div>
+        </div>
+
+        <!-- Category Filter Bar -->
+        <div id="categoryFilterBar">
+            <div class="categoryPill active" data-category="all">All</div>
+            <div class="categoryPill" data-category="burgers">Burgers</div>
+            <div class="categoryPill" data-category="pizza">Pizza</div>
+            <div class="categoryPill" data-category="healthy">Healthy</div>
+            <div class="categoryPill" data-category="bakery">Bakery</div>
+            <div class="categoryPill" data-category="surplus">Perishable Surplus</div>
+        </div>
+
+        <!-- ============ FOODS: For You ============ -->
+        <div id="foods">
+            <div class="sectionHeader">Foods</div>
+
+            <div class="shelfHead">
+                <div id="shelfTitle">For You</div>
+                <a href="/tastebite/foods" class="shelfSeeAll">See all</a>
+            </div>
+
+            <div class="shelf">
+                <div class="shelfCardsFoods">
+                    <!-- Food card from backend -->
+                    <% for(food of menuItems){ %>
+                        <!-- Food Card -->
+                        <button class="foodCard" data-id="<%= food._id %>">
+                            <div class="foodImage">
+                                <span class="foodBadge">Bestseller</span>
+                                <div class="quickAddBtn">+</div>
+                            </div>
+                            <div class="foodCardContent">
+                                <div class="foodName"><%= food.name %></div>
+                                <div class="foodRestaurant"><%= food.restaurantId.name %></div>
+                                <div class="foodPriceRow">
+                                    <span class="foodPrice"><%= food.price %></span>
+                                </div>
+                            </div>
+                        </button>
+                    <% } %>
+
+
+                    <!-- Food Card -->
+                    <div class="foodCard">
+                        <div class="foodImage">
+                            <span class="foodBadge">🔥 Trending</span>
+                            <div class="quickAddBtn">+</div>
+                        </div>
+                        <div class="foodCardContent">
+                            <div class="foodName">Cheesy Farmhouse Pizza</div>
+                            <div class="foodRestaurant">Napoli Slice House</div>
+                            <div class="foodPriceRow">
+                                <span class="foodPrice">$8.50</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Food Card -->
+                    <div class="foodCard">
+                        <div class="foodImage">
+                            <span class="foodBadge">Ordered 230x today</span>
+                            <div class="quickAddBtn">+</div>
+                        </div>
+                        <div class="foodCardContent">
+                            <div class="foodName">Classic Smash Burger</div>
+                            <div class="foodRestaurant">Patty &amp; Co.</div>
+                            <div class="foodPriceRow">
+                                <span class="foodPrice">$10.00</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Food Card (Surplus / discounted) -->
+                    <div class="foodCard surplus">
+                        <div class="foodImage">
+                            <span class="foodBadge surplusBadge">Only 3 left</span>
+                            <div class="quickAddBtn">+</div>
+                        </div>
+                        <div class="foodCardContent">
+                            <div class="foodName">Rescued Sourdough Loaf</div>
+                            <div class="foodRestaurant">The Daily Crumb</div>
+                            <div class="foodPriceRow">
+                                <span class="foodOriginalPrice">$7.00</span>
+                                <span class="foodPrice discounted">$3.50</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Food Card -->
+                    <div class="foodCard">
+                        <div class="foodImage">
+                            <span class="foodBadge">Bestseller</span>
+                            <div class="quickAddBtn">+</div>
+                        </div>
+                        <div class="foodCardContent">
+                            <div class="foodName">Molten Chocolate Cake</div>
+                            <div class="foodRestaurant">Sweet Tooth</div>
+                            <div class="foodPriceRow">
+                                <span class="foodPrice">$5.50</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Food Card -->
+                    <div class="foodCard">
+                        <div class="foodImage">
+                            <span class="foodBadge">🔥 Trending</span>
+                            <div class="quickAddBtn">+</div>
+                        </div>
+                        <div class="foodCardContent">
+                            <div class="foodName">Paneer Tikka Wrap</div>
+                            <div class="foodRestaurant">Green Bowl Kitchen</div>
+                            <div class="foodPriceRow">
+                                <span class="foodPrice">$7.25</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ============ RESTAURANTS ============ -->
+        <div id="restaurants">
+            <div class="shelfHead">
+                <div class="sectionHeader">Restaurants You'll Love</div>
+                <div class="shelfNav">
+                    <a href="/tastebite/restaurants/new" id="addRestaurantBtn">+ Add Restaurant</a>
+                    <div class="shelfNavBtn" id="restaurantsPrevBtn">&larr;</div>
+                    <div class="shelfNavBtn" id="restaurantsNextBtn">&rarr;</div>
+                </div>
+            </div>
+
+            <div class="shelf">
+                <div class="shelfCards" id="restaurantShelf">
+                    <!-- Restaurant Card from Backend -->
+                    <% for(restaurant of allRestaurants) { %>
+                        <!-- Restaurant Card -->
+                        <a href="tastebite/restaurants/<%= restaurant._id %>" class="restaurantCard">
+                            <div class="restaurantImage">
+                                <img src="<%= restaurant.imageURL.url %>" alt="">
+                                <div class="restaurantRatingBadge">
+                                    <span class="starIcon"></span> <%= restaurant.rating %>
+                                </div>
+                                <div class="restaurantImageOverlay">
+                                    <div class="restaurantNameOnImage"><%= restaurant.name %></div>
+                                </div>
+                            </div>
+                            <div class="restaurantInfo">
+                                <div class="restaurantInfoRow">
+                                    <span class="restaurantCuisine">
+                                        <% for(cuisine of restaurant.cuisines){ %>
+                                            <%= cuisine %> 
+                                            <% if(restaurant.cuisines.indexOf(cuisine) < restaurant.cuisines.length - 1) {%>
+                                                    <span>•</span>
+                                            <% } %>
+                                        <% } %>
+                                    </span>
+                                    <span class="restaurantTime">20-30 min</span>
+                                </div>
+                                <div class="restaurantInfoRow muted">
+                                    <span class="restaurantLocation">12K+ orders</span>
+                                </div>
+                                <div class="restaurantOfferBadge">
+                                    <span class="offerIcon"></span> 50% Surplus Available
+                                </div>
+                            </div>
+                        </a>
+                    <% } %>
+
+
+                    <!-- Restaurant Card -->
+                    <div class="restaurantCard">
+                        <div class="restaurantImage patty">
+                            <div class="restaurantRatingBadge">
+                                <span class="starIcon"></span> 4.6
+                            </div>
+                            <div class="restaurantImageOverlay">
+                                <div class="restaurantNameOnImage">Patty &amp; Co.</div>
+                            </div>
+                        </div>
+                        <div class="restaurantInfo">
+                            <div class="restaurantInfoRow">
+                                <span class="restaurantCuisine">Burgers • American</span>
+                                <span class="restaurantTime">25-35 min</span>
+                            </div>
+                            <div class="restaurantInfoRow muted">
+                                <span class="restaurantLocation">24K+ orders</span>
+                            </div>
+                            <div class="restaurantOfferBadge muted">
+                                Free delivery above $15
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Restaurant Card -->
+                    <div class="restaurantCard">
+                        <div class="restaurantImage napoli">
+                            <div class="restaurantRatingBadge">
+                                <span class="starIcon"></span> 4.7
+                            </div>
+                            <div class="restaurantImageOverlay">
+                                <div class="restaurantNameOnImage">Napoli Slice House</div>
+                            </div>
+                        </div>
+                        <div class="restaurantInfo">
+                            <div class="restaurantInfoRow">
+                                <span class="restaurantCuisine">Pizza • Italian</span>
+                                <span class="restaurantTime">30-40 min</span>
+                            </div>
+                            <div class="restaurantInfoRow muted">
+                                <span class="restaurantLocation">31K+ orders</span>
+                            </div>
+                            <div class="restaurantOfferBadge">
+                                <span class="offerIcon"></span> 50% Surplus Available
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Restaurant Card -->
+                    <div class="restaurantCard">
+                        <div class="restaurantImage crumb">
+                            <div class="restaurantRatingBadge">
+                                <span class="starIcon"></span> 4.9
+                            </div>
+                            <div class="restaurantImageOverlay">
+                                <div class="restaurantNameOnImage">The Daily Crumb</div>
+                            </div>
+                        </div>
+                        <div class="restaurantInfo">
+                            <div class="restaurantInfoRow">
+                                <span class="restaurantCuisine">Bakery • Pastries</span>
+                                <span class="restaurantTime">15-25 min</span>
+                            </div>
+                            <div class="restaurantInfoRow muted">
+                                <span class="restaurantLocation">9K+ orders</span>
+                            </div>
+                            <div class="restaurantOfferBadge">
+                                <span class="offerIcon"></span> 50% Surplus Available
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Restaurant Card -->
+                    <div class="restaurantCard">
+                        <div class="restaurantImage sunrise">
+                            <div class="restaurantRatingBadge">
+                                <span class="starIcon"></span> 4.5
+                            </div>
+                            <div class="restaurantImageOverlay">
+                                <div class="restaurantNameOnImage">Sunrise Deli</div>
+                            </div>
+                        </div>
+                        <div class="restaurantInfo">
+                            <div class="restaurantInfoRow">
+                                <span class="restaurantCuisine">Sandwiches • Cafe</span>
+                                <span class="restaurantTime">20-30 min</span>
+                            </div>
+                            <div class="restaurantInfoRow muted">
+                                <span class="restaurantLocation">15K+ orders</span>
+                            </div>
+                            <div class="restaurantOfferBadge muted">
+                                Flat 10% off on pre-booking
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Restaurant Card -->
+                    <div class="restaurantCard">
+                        <div class="restaurantImage market">
+                            <div class="restaurantRatingBadge">
+                                <span class="starIcon"></span> 4.4
+                            </div>
+                            <div class="restaurantImageOverlay">
+                                <div class="restaurantNameOnImage">Fresh Cart Market</div>
+                            </div>
+                        </div>
+                        <div class="restaurantInfo">
+                            <div class="restaurantInfoRow">
+                                <span class="restaurantCuisine">Perishable Groceries</span>
+                                <span class="restaurantTime">10-20 min</span>
+                            </div>
+                            <div class="restaurantInfoRow muted">
+                                <span class="restaurantLocation">6K+ orders</span>
+                            </div>
+                            <div class="restaurantOfferBadge">
+                                <span class="offerIcon"></span> 50% Surplus Available
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- ================= CART DRAWER (hidden by default) ================= -->
+    <div id="cartDrawer">
+        <div id="cartOverlay"></div>
+        <div id="cartPanel">
+
+            <div id="cartHeader">
+                <div id="cartTitle">Your Cart</div>
+                <div id="cartCloseBtn">&times;</div>
+            </div>
+
+            <div id="cartAddress">
+                <span class="locationIcon"></span>
+                <span>Delivering to <strong>Baker Street 24</strong></span>
+            </div>
+
+            <div id="cartItems">
+                <!-- Empty state -->
+                <div id="cartEmptyState">
+                    <span class="cartEmptyIcon"></span>
+                    <div class="cartEmptyText">Your cart is empty</div>
+                </div>
+
+                <!-- Cart Item (repeatable) -->
+                <div class="cartItem">
+                    <div class="cartItemInfo">
+                        <div class="cartItemName">Rescued Sourdough Loaf</div>
+                        <div class="cartItemPriceRow">
+                            <span class="cartItemOriginalPrice">$7.00</span>
+                            <span class="cartItemPrice">$3.50</span>
+                        </div>
+                    </div>
+                    <div class="cartItemQty">
+                        <div class="qtyMinusBtn">-</div>
+                        <span class="qtyValue">1</span>
+                        <div class="qtyPlusBtn">+</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="cartSummary">
+                <div class="summaryRow">
+                    <span class="summaryLabel">Item Total</span>
+                    <span class="summaryValue" id="itemTotal">$0.00</span>
+                </div>
+                <div class="summaryRow">
+                    <span class="summaryLabel">Delivery Fee</span>
+                    <span class="summaryValue" id="deliveryFee">$0.00</span>
+                </div>
+                <div class="summaryRow discount">
+                    <span class="summaryLabel">Surplus Discount Saved</span>
+                    <span class="summaryValue" id="discountSaved">-$0.00</span>
+                </div>
+                <div class="summaryRow total">
+                    <span class="summaryLabel">Total</span>
+                    <span class="summaryValue" id="grandTotal">$0.00</span>
+                </div>
+
+                <div id="checkoutBtn">Proceed to Checkout</div>
+            </div>
+
+        </div>
+    </div>
+
+        <!-- ================= FOOD DETAIL MODAL (hidden by default) ================= -->
+    <div id="foodDetailModal">
+        <div id="foodDetailOverlay"></div>
+        <div id="foodDetailPanel">
+
+            <button id="foodDetailCloseBtn">&times;</button>
+
+            <div id="foodDetailImage"></div>
+
+            <div id="foodDetailBody">
+                <div id="foodDetailName"></div>
+                <div id="foodDetailRestaurant"></div>
+                <div id="foodDetailDesc"></div>
+
+                <div id="foodDetailPriceRow">
+                    <span id="foodDetailOriginalPrice"></span>
+                    <span id="foodDetailPrice"></span>
+                </div>
+
+                <div id="foodDetailQty">
+                    <div class="qtyMinusBtn" id="foodDetailQtyMinus">-</div>
+                    <span class="qtyValue" id="foodDetailQtyValue">1</span>
+                    <div class="qtyPlusBtn" id="foodDetailQtyPlus">+</div>
+                </div>
+
+                <div id="foodDetailAddBtn">Add to Cart</div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const menuItems = <%- JSON.stringify(menuItems) %>;
+    </script>
+
+    <script src="/js/script.js"></script>
+</body>
+

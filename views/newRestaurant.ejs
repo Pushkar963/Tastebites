@@ -1,0 +1,122 @@
+<% layout("/layouts/boilerplate") %>
+
+<body>
+    <!-- ================= CONTENT ================= -->
+    <div id="formContent">
+
+        <a href="/tastebite" id="backLink">&larr; Back</a>
+
+        <div id="formHeader">
+            <div id="formTitle">Add a New Restaurant</div>
+            <div id="formSubtitle">Fill in the details below to list a restaurant on TasteBites.</div>
+        </div>
+
+        <form action="/tastebite/restaurants" method="POST" id="restaurantForm" novalidate enctype="multipart/form-data">
+
+            <!-- Image upload -->
+            <div class="formGroup">
+                <label class="formLabel">Restaurant Image</label>
+                <div id="imageUploadBox">
+                    <div id="imageUploadIcon"></div>
+                    <div id="imageUploadText">Click to upload or drag an image here</div>
+                    <input type="file" id="restaurantImageInput" accept="image/*" name="image" required>
+                </div> 
+
+                <img id="imagePreview" style="display:none;" alt="Preview">
+                <button type="button" id="changeImageBtn" style="display:none;">Change Image</button>
+
+                <span class="fieldError">Please enter restaurant image</span>
+                <span class="fieldSuccess">Beautiful restaurant</span>
+            </div>
+
+            <!-- Name -->
+            <div class="formGroup">
+                <label class="formLabel">Restaurant Name</label>
+                <input type="text" class="formInput" id="restaurantNameInput" placeholder="e.g. Napoli Slice House" name="restaurant[name]" required>
+                <span class="fieldError">Please enter a restaurant name.</span>
+                <span class="fieldSuccess">Restaurant name looks awesome</span>
+            </div>
+
+            <!-- Cuisine tags (array field) -->
+            <div class="formGroup">
+                <label class="formLabel">Cuisine Type(s)</label>
+                <div id="cuisineTagInput">
+                    <span class="cuisineTagChip">
+                        Pizza <span class="chipRemove">&times;</span>
+                        <input type="hidden" name="restaurant[cuisines][]" value="Pizza">
+                    </span>
+                    <span class="cuisineTagChip">
+                        Italian <span class="chipRemove">&times;</span>
+                        <input type="hidden" name="restaurant[cuisines][]" value="Italian">
+                    </span>
+                    <input type="text" id="cuisineTagField" placeholder="Type a cuisine and press Enter">
+                </div>
+            </div>
+
+            <!-- Address (matches address.streetAddress / city / pincode / landmark) -->
+            <div class="formGroup">
+                <label class="formLabel">Street Address</label>
+                <input type="text" class="formInput" id="streetAddressInput" placeholder="e.g. 12 Market Row" name="restaurant[address][streetAddress]" required>
+                <span class="fieldError">Please enter street address.</span>
+                <span class="fieldSuccess">Got your address</span>
+
+            </div>
+
+            <div class="formRow">
+                <div class="formGroup">
+                    <label class="formLabel">City</label>
+                    <input type="text" class="formInput" id="cityInput" placeholder="e.g. Kathmandu" name="restaurant[address][city]" required>
+                    <span class="fieldError">Please enter city.</span>
+                    <span class="fieldSuccess">Got your city</span>
+                </div>
+                <div class="formGroup">
+                    <label class="formLabel">Pincode</label>
+                    <input type="text" class="formInput" id="pincodeInput" placeholder="e.g. 44600" name="restaurant[address][pincode]" required>
+                    <span class="fieldError">Please enter your pincode</span>
+                    <span class="fieldSuccess">Got your pincode</span>
+
+                </div>
+            </div>
+
+            <div class="formGroup">
+                <label class="formLabel">Landmark <span class="optionalTag">(optional)</span></label>
+                <input type="text" class="formInput" id="landmarkInput" placeholder="e.g. Near City Mall" name="restaurant[address][landmark]">
+                <span class="fieldSuccess">Its optional</span>
+            </div>
+
+            <!-- Contact -->
+            <div class="formRow">
+                <div class="formGroup">
+                    <label class="formLabel">Phone Number</label>
+                    <input type="tel" class="formInput" id="phoneNumberInput" placeholder="e.g. 9800000000" name="restaurant[phoneNumber]" required>
+                    <span class="fieldError">Please enter your phone number.</span>
+                    <span class="fieldSuccess">Got your phone number</span>
+
+                </div>
+                <div class="formGroup">
+                    <label class="formLabel">Email</label>
+                    <input type="email" class="formInput" id="emailInput" placeholder="e.g. contact@restaurant.com" name="restaurant[email]" required>
+                    <span class="fieldError">Please enter you email.</span>
+                    <span class="fieldSuccess">Got your email</span>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <div class="formGroup">
+                <label class="formLabel">Short Description</label>
+                <textarea name="restaurant[description]" class="formTextarea" id="descriptionInput" rows="4" placeholder="A short line about the restaurant, shown on its page" required></textarea>
+                <span class="fieldError">Please enter a description about your restaurant.</span>
+                <span class="fieldSuccess">Description of your restaurant looks amazing</span>
+            </div>
+
+            <div id="formActions">
+                <div id="cancelFormBtn">Cancel</div>
+                <button type="submit" id="submitFormBtn">Add Restaurant</button>
+            </div>
+
+        </form>
+
+    </div>
+    <script src="/js/script.js"></script>
+    <script src="/js/validate.js"></script>
+</body>
