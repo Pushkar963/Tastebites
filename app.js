@@ -99,7 +99,7 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use("/tastebite", indexRouter);
+app.use("/", indexRouter);
 app.use("/tastebite/restaurants/:restaurantId/foods", menuItemsRouter);
 app.use("/tastebite/restaurants", restaurantRouter);
 app.use("/tastebite/restaurants/:restaurantId/reviews", reviewsRouter);
