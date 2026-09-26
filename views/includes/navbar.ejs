@@ -22,27 +22,39 @@
 
             <div id="section2">
                 <div id="authButtons">
-                    <% if(!currUser) { %>
+                    <% if(typeof currUser === "undefined" || !currUser) { %>
+                        <!-- lets check -->
+                    <!-- <button id="loginBtn">Log in</button>
+                    <button id="signupBtn">Sign up</button> -->
                     <a href="/tastebite/login" id="loginBtn">Log in</a>
                     <a href="/tastebite/signup" id="signupBtn">Sign up</a>
-                    <% } %>
-                    <% if(currUser) { %>
+                    <% } else { %>
+                    
                         <form action="/tastebite/logout" method="POST" id="logoutForm">
                             <button type="submit" id="logoutBtn">Log out</button>
                         </form>
                     <% } %>
                 </div>
-                <div id="cart">
+                <a href="/tastebite/cart" id="cart">
                     <span class="cartIcon"></span>
                     <span class="cartLabel">Cart</span>
                     <span id="cartCount">0</span>
-                </div>
+                </a>
 
+
+                <div id="mobileHeaderActions">
+                    <a href="/tastebite/login" id="accountIconBtn" aria-label="Account">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+                    </a>
+                    <button id="hamburgerBtn" aria-label="Menu">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+                    </button>
+                </div>
             </div>
         </div>
 
         <!-- Trust strip -->
-        <div id="trustStrip">
+        <!-- <div id="trustStrip">
             <div class="trustItem">
                 <span class="trustIcon ratingIcon"></span>
                 <span class="trustText">4.8 App Rating</span>
@@ -59,6 +71,6 @@
                 <span class="trustIcon deliveryIcon"></span>
                 <span class="trustText">Avg. delivery under 30 min</span>
             </div>
-        </div>
+        </div> -->
 
     </div>

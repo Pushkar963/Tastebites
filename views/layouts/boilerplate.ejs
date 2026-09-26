@@ -14,5 +14,88 @@
         <%- body %> 
     </div>
     <%- include("../includes/footer.ejs") %>
+
+    
+    <div id="mobileBottomNav">
+    <a href="/tastebite" class="bottomNavItem active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <span>Browse</span>
+    </a>
+    <a href="/tastebite/orders" class="bottomNavItem">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v4H4zM4 12h16v8H4z"/></svg>
+        <span>Orders</span>
+    </a>
+    <div id="bottomNavCart" class="bottomNavItem">
+        <div id="bottomCartIconWrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            <span id="bottomCartBadge">3</span>
+        </div>
+        <span>Cart</span>
+    </div>
+    </div>
+
+<!-- 
+    <div id="authModalOverlay">
+    <div id="authModalPanel">
+        <button id="closeAuthModal">&times;</button>
+
+        <div id="authTabs">
+            <div class="authTab active" data-tab="login">Log in</div>
+            <div class="authTab" data-tab="signup">Sign up</div>
+        </div>
+
+         Login form 
+        <form action="/tastebite/login" method="POST" class="authTabPanel active" data-panel="login" novalidate>
+            <div class="formGroup">
+                <label class="formLabel">Username</label>
+                <input type="text" class="formInput" name="username" required>
+            </div>
+            <div class="formGroup">
+                <label class="formLabel">Password</label>
+                <input type="password" class="formInput" name="password" required>
+            </div>
+            <button type="submit" id="submitAuthBtn">Log in</button>
+        </form>
+
+
+
+         lets check 
+        Signup form 
+        <form action="/tastebite/signup" method="POST" class="authTabPanel" data-panel="signup" novalidate>
+            <div class="formGroup">
+                <label class="formLabel">Username</label>
+                <input type="text" class="formInput" name="username" required>
+            </div>
+            <div class="formGroup">
+                <label class="formLabel">Email</label>
+                <input type="email" class="formInput" name="user[email]" required>
+            </div>
+            <div class="formGroup">
+                <label class="formLabel">Password</label>
+                <input type="password" class="formInput" name="password" minlength="8" required>
+            </div>
+            <div class="formGroup">
+                <label class="formLabel">Phone Number</label>
+                <input type="tel" class="formInput" name="user[phoneNumber]" required>
+            </div>
+            <div class="formGroup">
+                <label class="formLabel">Street Address</label>
+                <input type="text" class="formInput" name="user[address][streetAddress]" required>
+            </div>
+            <div class="formRow">
+                <div class="formGroup">
+                    <label class="formLabel">City</label>
+                    <input type="text" class="formInput" name="user[address][city]" required>
+                </div>
+                <div class="formGroup">
+                    <label class="formLabel">Pincode</label>
+                    <input type="text" class="formInput" name="user[address][pincode]" required>
+                </div>
+            </div>
+            <button type="submit" id="submitAuthBtn">Create Account</button>
+        </form>
+    </div>
+</div> -->
+<script src="/js/script.js"></script>
 </body>
 </html>

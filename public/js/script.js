@@ -3,7 +3,7 @@ let resDetailsPop = document.querySelector("#foodDetailModal");
 let popUpCloseBtn = document.querySelector("#foodDetailCloseBtn");
 const modalOverlay = document.getElementById("reviewModalOverlay");
 
-// Food details modal logic
+// Food details modal logic1
 cards.forEach((card) => {
     card.addEventListener("click", (event) => {
         if (!resDetailsPop) return;
@@ -159,6 +159,7 @@ const preview = document.getElementById("imagePreview");
 const changeBtn = document.getElementById("changeImageBtn");
 const successMsg = document.getElementById("imageSuccessMsg");
 
+if (fileInput) {
 fileInput.addEventListener("change", () => {
   const file = fileInput.files[0];
   if (!file) return;
@@ -183,8 +184,108 @@ fileInput.addEventListener("change", () => {
   };
   reader.readAsDataURL(file);
 });
+}
 
+if (changeBtn) {
 changeBtn.addEventListener("click", () => {
   fileInput.click();
 });
+}
 
+
+// lets check
+/*
+const authOverlay = document.getElementById("authModalOverlay");
+
+function openAuthModal(tab) {
+  authOverlay.classList.add("open");
+  switchAuthTab(tab);
+}
+
+function switchAuthTab(tab) {
+  document.querySelectorAll(".authTab").forEach(t => t.classList.toggle("active", t.dataset.tab === tab));
+  document.querySelectorAll(".authTabPanel").forEach(p => p.classList.toggle("active", p.dataset.panel === tab));
+}
+
+document.getElementById("loginBtn").addEventListener("click", () => openAuthModal("login"));
+document.getElementById("signupBtn").addEventListener("click", () => openAuthModal("signup"));
+document.getElementById("closeAuthModal").addEventListener("click", () => authOverlay.classList.remove("open"));
+authOverlay.addEventListener("click", (e) => { if (e.target === authOverlay) authOverlay.classList.remove("open"); });
+
+document.querySelectorAll(".authTab").forEach(tabEl => {
+  tabEl.addEventListener("click", () => switchAuthTab(tabEl.dataset.tab));
+});
+
+*/
+
+document.addEventListener("DOMContentLoaded", () => {
+    const menuList = document.querySelector("#menuList");
+    
+    if (menuList) {
+        menuList.addEventListener("click", (e) => {
+            // 1. Check if the user clicked an ADD button
+            if (e.target.classList.contains("addToCartBtn")) {
+        
+                const menuItem = e.target.closest(".menuItem");
+                const foodId = menuItem.dataset.id;
+                console.log("Food Id: ", foodId);
+            
+                // when the add button is clicked, foodId is extracted and packaged into an object
+                const payload = {
+                    foodId: foodId,
+                    quantity: 1, 
+                }
+            
+                // Send it using fetch()
+                // fetch() takes two main arguments:
+                // The URL endpoint: where the backend is listening (/tastebite/cart/add).
+                // The options object: settings telling the browser how to send the request.
+                fetch("/tastebite/cart/add", {
+                    method: "POST", 
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify(payload),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Success: ", data);
+                    alert("Added to cart!");
+                })
+                .catch(error => {
+                    console.error("Error: ", error);
+                });
+        
+            }
+        
+        })
+    }
+
+})
+
+
+document.querySelector("#cartPageItems").addEventListener("click", (e) => {
+    
+    const isPlus = e.target.classList.contains("qtyPlusBtn");
+    const isMinus = e.target.classList.contains("qtyMinusBtn");
+
+    if (isPlus || isMinus) {
+        const cartItem = e.target.closest(".cartPageItem")
+        const foodId = cartItem.dataset.id;
+
+        const action = isPlus ? "increase" : "decrease";
+
+        fetch("/tastebite/cart/update", {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ foodId, action }),
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log("Success:", data);
+            if (data.success) {
+                window.location.reload(); // Refreshes page to show new database state
+            }
+        })
+        .catch(err => console.error("Error:", err));
+        
+    }
+})

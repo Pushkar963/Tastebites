@@ -19,8 +19,9 @@ const restaurantRouter = require("./routes/restaurant.js");
 const menuItemsRouter = require("./routes/menuItem.js");
 const reviewsRouter = require("./routes/reviews.js");
 const userRouter = require("./routes/user.js");
-const User = require("./models/user.js");
+const cartRouter = require("./routes/cart.js");
 
+const User = require("./models/user.js");
 const { getRelativeTime } = require("./utils/dateFormatter.js");
 const ExpressError = require("./utils/ExpressError.js");
 
@@ -99,13 +100,12 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use("/", indexRouter);
-app.use("/tastebite/restaurants/:restaurantId/foods", menuItemsRouter);
-app.use("/tastebite/restaurants", restaurantRouter);
-app.use("/tastebite/restaurants/:restaurantId/reviews", reviewsRouter);
 app.use("/tastebite",  userRouter);
-
-
+app.use("/tastebite", cartRouter);
+app.use("/tastebite/restaurants/:restaurantId/foods", menuItemsRouter);
+app.use("/tastebite/restaurants/:restaurantId/reviews", reviewsRouter);
+app.use("/tastebite/restaurants", restaurantRouter);
+app.use("/", indexRouter);
 
 
 // Route mismatch error handling

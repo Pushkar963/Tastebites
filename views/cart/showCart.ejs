@@ -1,0 +1,96 @@
+<% layout("/layouts/boilerplate") %>
+
+<body>
+
+    <div id="cartPageContent">
+
+        <div id="backLink">&larr; Back to Home</div>
+
+        <div class="sectionHeader">Your Cart</div>
+
+        <!-- Cart items -->
+        <div id="cartPageItems">
+            <% if (items && items.length > 0) { %>
+            <% for (item of items) { %>
+                
+            <div class="cartPageItem" data-id="<%= item.menuItemId._id%>">
+                <div class="cartPageItemImage"></div>
+                <div class="cartPageItemInfo">
+                    <div class="cartPageItemName"><%= item.menuItemId.name %></div>
+                    <div class="cartPageItemRestaurant"><%=item.menuItemId.restaurantId.name %></div>
+                    <div class="cartPageItemPriceRow">
+                        <span class="cartPageItemPrice">$<%= item.menuItemId.price %></span>
+                    </div>
+                </div>
+                <div class="cartPageItemActions">
+                    <div class="cartItemQty">
+                        <button type="button" class="qtyMinusBtn">-</button>
+                        <span class="qtyValue"><%= item.quantity %></span>
+                        <button type="button" class="qtyPlusBtn">+</button>
+                    </div>
+                    <form method="POST" action="/tastebite/cart/<%= item.menuItemId._id %>?_method=DELETE">
+                        <button type="submit" class="cartRemoveBtn">Remove</button>
+                    </form>
+                </div>
+            </div>
+            <% } %>
+            <% } else { %>
+                <p>Your cart is empty!</p>
+            <% } %>
+            <div class="cartPageItem">
+                <div class="cartPageItemImage surplus"></div>
+                <div class="cartPageItemInfo">
+                    <div class="cartPageItemName">Rescued Sourdough Loaf</div>
+                    <div class="cartPageItemRestaurant">The Daily Crumb</div>
+                    <div class="cartPageItemPriceRow">
+                        <span class="cartPageItemOriginalPrice">$7.00</span>
+                        <span class="cartPageItemPrice discounted">$3.50</span>
+                    </div>
+                </div>
+                <div class="cartPageItemActions">
+                    <div class="cartItemQty">
+                        <div class="qtyMinusBtn">-</div>
+                        <span class="qtyValue">1</span>
+                        <div class="qtyPlusBtn">+</div>
+                    </div>
+                    
+                    <button type="submit" class="cartRemoveBtn">Remove</button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Empty state -->
+        <div id="cartEmptyPageState">
+            <div id="cartEmptyPageIcon"></div>
+            <div id="cartEmptyPageText">Your cart is empty</div>
+            <a href="/tastebite" id="cartEmptyPageBtn">Browse Restaurants</a>
+        </div>
+
+        <!-- Order summary -->
+        <div id="cartSummaryCard">
+            <div class="sectionHeader small">Order Summary</div>
+
+            <div class="summaryRow">
+                <span class="summaryLabel">Item Total</span>
+                <span class="summaryValue">$31.50</span>
+            </div>
+            <div class="summaryRow">
+                <span class="summaryLabel">Delivery Fee</span>
+                <span class="summaryValue">$2.99</span>
+            </div>
+            <div class="summaryRow discount">
+                <span class="summaryLabel">Surplus Discount Saved</span>
+                <span class="summaryValue">-$3.50</span>
+            </div>
+            <div class="summaryRow total">
+                <span class="summaryLabel">Total</span>
+                <span class="summaryValue">$34.49</span>
+            </div>
+
+            <div id="checkoutBtn">Proceed to Checkout</div>
+        </div>
+
+    </div>
+
+</body>

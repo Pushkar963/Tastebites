@@ -1,0 +1,45 @@
+<div class="checkoutContainer">
+    <h1 class="checkoutTitle">Checkout</h1>
+
+    <section class="checkoutItemsSection">
+        <h2 class="checkoutSectionHeading">Order Summary</h2>
+        <ul class="checkoutItemList">
+            <% checkoutItems.forEach(item => { %>
+                <li class="checkoutItemRow">
+                    <span class="checkoutItemName"><%= item.name %> x<%= item.quantity %></span>
+                    <span class="checkoutItemPrice">$<%= item.lineTotal.toFixed(2) %></span>
+                </li>
+            <% }) %>
+        </ul>
+    </section>
+
+    <section class="checkoutAddressSection">
+        <h2 class="checkoutSectionHeading">Delivery Address</h2>
+        <p class="checkoutAddressText">
+            <%= deliveryAddress.streetAddress %>, <%= deliveryAddress.city %>, <%= deliveryAddress.pincode %>
+            <% if (deliveryAddress.landmark) { %>
+                <br>
+                <%= deliveryAddress.landmark %>
+            <% } %>
+        </p>
+    </section>
+
+    <section class="checkoutTotalsSection">
+        <div class="checkoutTotalRow">
+            <span>Item Total</span>
+            <span>$<%= itemTotal.toFixed(2) %></span>
+        </div>
+        <div class="checkoutTotalRow">
+            <span>Delivery Fee</span>
+            <span>$<%= deliveryFee.toFixed(2) %></span>
+        </div>
+        <div class="checkoutTotalRow checkoutGrandTotal">
+            <span>Total</span>
+            <span>$<%= totalAmount.toFixed(2) %></span>
+        </div>
+    </section>
+
+    <form class="checkoutPayForm" method="POST" action="/tastebite/checkout/pay">
+        <button type="submit" class="checkoutPayButton">Pay Now</button>
+    </form>
+</div>

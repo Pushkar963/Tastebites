@@ -1,5 +1,5 @@
 <% layout("/layouts/boilerplate") %>
-<body>
+
     <!-- ================= CONTENT ================= -->
     <div id="menuContent">
 
@@ -131,7 +131,7 @@
             <div id="menuList">
 
                 <% for(food of foods) { %>
-                        <div class="menuItem">
+                        <div class="menuItem" data-id="<%= food._id %>">
                             <a href="/tastebite/restaurants/<%= restaurant._id %>/foods/<%= food._id %>/edit" class="editFoodBtn">Edit</a>
                             <div class="menuItemInfo">
                                 <span class="vegDot"></span>
@@ -389,7 +389,7 @@
     </div>
     <% } %>
 
-    <script src="/js/script.js"></script>
+
     <script src="/js/validate.js"></script>
-</body>
+
 
