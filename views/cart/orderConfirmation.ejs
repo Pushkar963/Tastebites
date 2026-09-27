@@ -1,0 +1,47 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="orderConfirmationContainer">
+    <h1 class="orderConfirmationTitle">Order Confirmed!</h1>
+    <p class="orderConfirmationSubtext">Your order has been placed successfully.</p>
+
+    <section class="orderConfirmationDetails">
+        <div class="orderConfirmationRow">
+            <span class="orderConfirmationLabel">Order ID</span>
+            <span class="orderConfirmationValue"><%= order._id %></span>
+        </div>
+        <div class="orderConfirmationRow">
+            <span class="orderConfirmationLabel">Status</span>
+            <span class="orderConfirmationValue"><%= order.orderStatus %></span>
+        </div>
+        <div class="orderConfirmationRow">
+            <span class="orderConfirmationLabel">Payment</span>
+            <span class="orderConfirmationValue"><%= order.paymentStatus %></span>
+        </div>
+    </section>
+
+    <section class="orderConfirmationItemsSection">
+        <h2 class="checkoutSectionHeading">Items</h2>
+        <ul class="checkoutItemList">
+            <% order.items.forEach(item => { %>
+                <li class="checkoutItemRow">
+                    <span class="checkoutItemName"><%= item.name %> x<%= item.quantity %></span>
+                    <span class="checkoutItemPrice">$<%= (item.price * item.quantity).toFixed(2) %></span>
+                </li>
+            <% }) %>
+        </ul>
+    </section>
+
+    <section class="orderConfirmationAddressSection">
+        <h2 class="checkoutSectionHeading">Delivering To</h2>
+        <p class="checkoutAddressText">
+            <%= order.deliveryAddress.streetAddress %>, <%= order.deliveryAddress.city %>, <%= order.deliveryAddress.pincode %>
+        </p>
+    </section>
+
+    <div class="orderConfirmationTotal">
+        <span>Total Paid</span>
+        <span>$<%= order.totalAmount.toFixed(2) %></span>
+    </div>
+
+    <a href="/tastebite" class="orderConfirmationHomeBtn">Back to Home</a>
+</div>

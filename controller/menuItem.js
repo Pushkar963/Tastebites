@@ -13,10 +13,15 @@ module.exports.newFood = async (req, res) => {
     let { restaurantId } = req.params;
     req.body.menuItem.restaurantId = restaurantId;
     const newFood = new Menu(req.body.menuItem);
+
+    if (req.file) {
+        newFood.imageUrl = req.file.path;  // Cloudinary gives back a URL string here
+    }
+
     await newFood.save();
     req.flash("success", "New Food Added");
     res.redirect(`/tastebite/restaurants/${restaurantId}`);
-    console.log(newFood);
+    
 }
 
 module.exports.renderEditFoodForm = async (req, res) => {

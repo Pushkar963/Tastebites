@@ -14,11 +14,12 @@ cards.forEach((card) => {
 
         if (menuItem) {
             document.querySelector("#foodDetailName").textContent = menuItem.name;
+            document.querySelector("#foodDetailImageTag").src = menuItem.imageUrl;
             document.querySelector("#foodDetailRestaurant").textContent = menuItem.restaurantId?.name || "";
             document.querySelector("#foodDetailDesc").textContent = menuItem.description;
 
             if (menuItem.discountedPrice === null) {
-                document.querySelector("#foodDetailOriginalPrice").textContent = menuItem.price;
+                document.querySelector("#foodDetailOriginalPrice").textContent = `$ ${menuItem.price}` ;
                 document.querySelector("#foodDetailPrice").textContent = "";
                 document.querySelector("#foodDetailOriginalPrice").style.cssText = `
                     font-size: 18px;
@@ -26,8 +27,8 @@ cards.forEach((card) => {
                     color: var(--stone-800);
                 `;
             } else {
-                document.querySelector("#foodDetailOriginalPrice").textContent = menuItem.price;
-                document.querySelector("#foodDetailPrice").textContent = menuItem.discountedPrice;
+                document.querySelector("#foodDetailOriginalPrice").textContent = `$${menuItem.price}`;
+                document.querySelector("#foodDetailPrice").textContent = `$${menuItem.discountedPrice}`;
                 document.querySelector("#foodDetailOriginalPrice").style.cssText = `
                     font-size: 14px;
                     color: var(--stone-400);

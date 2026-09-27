@@ -1,5 +1,8 @@
 const Cart = require("../models/cart.js");
 const Menu = require("../models/menuItem.js");
+const Order = require("../models/order.js");
+
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 module.exports.showCart = async (req, res) => {
 
@@ -220,4 +223,137 @@ module.exports.renderCheckout = async (req, res) => {
         req.flash("error", "Something went wrong during checkout.");
         res.redirect("/tastebite/cart");
     }
+};
+
+
+module.exports.createCheckoutSession = async (req, res) => {
+    try {
+        const cart = await Cart.findOne({ userId: req.user._id }).populate("items.menuItemId");
+
+        if (!cart || cart.items.length === 0) {
+            req.flash("error", "Your cart is empty.");
+            return res.redirect("/tastebite/cart");
+        }
+
+        const line_items = cart.items.map((item) => {
+            const menuItem = item.menuItemId;
+            const unitPrice = menuItem.discountedPrice ?? menuItem.price;
+
+            return {
+                price_data: {
+                    currency: "usd",
+                    product_data: { name: menuItem.name },
+                    unit_amount: Math.round(unitPrice * 100), // Stripe wants cents
+                },
+                quantity: item.quantity,
+            };
+        });
+
+        // delivery fee as its own line item
+        line_items.push({
+            price_data: {
+                currency: "usd",
+                product_data: { name: "Delivery Fee" },
+                unit_amount: Math.round(2.99 * 100),
+            },
+            quantity: 1,
+        });
+
+        const session = await stripe.checkout.sessions.create({
+            payment_method_types: ["card"],
+            mode: "payment",
+            line_items,
+            success_url: `${req.protocol}://${req.get("host")}/tastebite/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+            cancel_url: `${req.protocol}://${req.get("host")}/tastebite/checkout/cancel`,
+            metadata: { userId: req.user._id.toString() },
+        });
+
+        res.redirect(303, session.url);
+
+    } catch (error) {
+        console.error("Stripe session error:", error);
+        req.flash("error", "Something went wrong starting payment.");
+        res.redirect("/tastebite/cart");
+    }
+};
+
+
+module.exports.checkoutSuccess = async (req, res) => {
+    try {
+        const { session_id } = req.query;
+
+        if (!session_id) {
+            req.flash("error", "Missing payment session.");
+            return res.redirect("/tastebite/cart");
+        }
+
+        // Retrieve the session fresh from Stripe — never trust the redirect alone
+        const session = await stripe.checkout.sessions.retrieve(session_id);
+
+        if (session.payment_status !== "paid") {
+            req.flash("error", "Payment was not completed.");
+            return res.redirect("/tastebite/cart");
+        }
+
+        // Guard against duplicate Order creation if user refreshes /success
+        const existingOrder = await Order.findOne({ stripeSessionId: session_id });
+        if (existingOrder) {
+            return res.render("cart/orderConfirmation", { order: existingOrder });
+        }
+
+        // Re-fetch cart fresh — same pattern as renderCheckout/createCheckoutSession
+        const cart = await Cart.findOne({ userId: req.user._id }).populate("items.menuItemId");
+
+        if (!cart || cart.items.length === 0) {
+            // Cart already emptied (e.g. user refreshed this page after success)
+            req.flash("error", "No active order found.");
+            return res.redirect("/tastebite/cart");
+        }
+
+        let itemTotal = 0;
+        const orderItems = cart.items.map((item) => {
+            const menuItem = item.menuItemId;
+            const unitPrice = menuItem.discountedPrice ?? menuItem.price;
+            itemTotal += unitPrice * item.quantity;
+
+            return {
+                menuItemId: menuItem._id,
+                name: menuItem.name,
+                price: unitPrice,
+                quantity: item.quantity,
+            };
+        });
+
+        const deliveryFee = 2.99;
+
+        const order = await Order.create({
+            userId: req.user._id,
+            restaurantId: cart.restaurantId,
+            items: orderItems,
+            deliveryAddress: req.user.address,
+            totalAmount: itemTotal + deliveryFee,
+            deliveryFee,
+            paymentMethod: "ONLINE",
+            paymentStatus: "COMPLETED",
+            orderStatus: "PLACED",
+            stripeSessionId: session_id,
+        });
+
+        // Empty the cart
+        cart.items = [];
+        cart.restaurantId = null;
+        await cart.save();
+
+        res.render("cart/orderConfirmation", { order });
+
+    } catch (error) {
+        console.error("Checkout success error:", error);
+        req.flash("error", "Something went wrong confirming your order.");
+        res.redirect("/tastebite/cart");
+    }
+};
+
+module.exports.checkoutCancel = (req, res) => {
+    req.flash("error", "Payment was cancelled.");
+    res.redirect("/tastebite/cart");
 };

@@ -4,18 +4,24 @@
         <div id="topBar">
             <div id="section1">
                 <div id="branding">
-                    <div id="brandLogo"></div>
+                    <div id="brandLogo">
+                        <img src="/assets/images/brandLogo.png" alt="TasteBites logo" class="brandLogoImg">
+                    </div>
                     <div id="brandName"><a href="/tastebite">TasteBites</a></div>
                 </div>
 
                 <div id="location">
-                    <span class="locationIcon"></span>
+                    <span class="locationIcon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin preview-icon"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>
+                    </span>
                     <span class="locationLabel">Deliver to</span>
                     <span class="locationAddress">Baker Street 24</span>
                 </div>
 
                 <div id="searchBar">
-                    <span class="searchIcon"></span>
+                    <span class="searchIcon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search preview-icon"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                    </span>
                     <input type="text" id="searchInput" placeholder="Craving something? Search dishes or restaurants...">
                 </div>
             </div>
@@ -36,7 +42,9 @@
                     <% } %>
                 </div>
                 <a href="/tastebite/cart" id="cart">
-                    <span class="cartIcon"></span>
+                    <span class="cartIcon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shopping-cart preview-icon"><path d="m2.05 2.05 1.099-.028a1 1 0 0 1 1.008.815l2.69 14.347A1 1 0 0 0 7.83 18H18"/><path d="M4.563 5h16.435a1 1 0 0 1 .981 1.204l-1.026 6.226A2 2 0 0 1 18.962 14H6.25"/><circle cx="18" cy="20" r="2"/><circle cx="8" cy="20" r="2"/></svg>
+                    </span>
                     <span class="cartLabel">Cart</span>
                     <span id="cartCount">0</span>
                 </a>

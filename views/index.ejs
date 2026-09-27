@@ -41,10 +41,12 @@
             <div class="shelf">
                 <div class="shelfCardsFoods">
                     <!-- Food card from backend -->
+                     <% console.log(menuItems) %>
                     <% for(food of menuItems){ %>
                         <!-- Food Card -->
                         <button class="foodCard" data-id="<%= food._id %>">
                             <div class="foodImage">
+                                <img src="<%= food.imageUrl %>" alt="<%= food.name %>">
                                 <span class="foodBadge">Bestseller</span>
                                 <div class="quickAddBtn">+</div>
                             </div>
@@ -52,7 +54,13 @@
                                 <div class="foodName"><%= food.name %></div>
                                 <div class="foodRestaurant"><%= food.restaurantId.name %></div>
                                 <div class="foodPriceRow">
-                                    <span class="foodPrice"><%= food.price %></span>
+                                    <% if (food.discountedPrice) {%>
+                                        <span id="foodDetailOriginalPrice" style="text-decoration: line-through; font-size: small;">$<%= food.price %></span>
+                                        <span class="foodPrice">$<%= food.discountedPrice %></span>
+                                    <% } else {%>
+                                        <span class="foodPrice">$<%= food.price %></span>
+                                    <% } %>
+                                    
                                 </div>
                             </div>
                         </button>
@@ -385,7 +393,9 @@
 
             <button id="foodDetailCloseBtn">&times;</button>
 
-            <div id="foodDetailImage"></div>
+            <div id="foodDetailImage">
+                <img id="foodDetailImageTag" alt="">
+            </div>
 
             <div id="foodDetailBody">
                 <div id="foodDetailName"></div>

@@ -70,6 +70,12 @@ const orderSchema = new Schema({
         min: [0, "Delivery Fee cannot be negative"],
     },
 
+    stripeSessionId: { 
+        type: String, 
+        unique: true, 
+        sparse: true 
+    },
+
     paymentMethod: {
         type: String,
         enum: ["COD", "CARD", "ONLINE"],

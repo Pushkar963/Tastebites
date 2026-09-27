@@ -14,6 +14,11 @@ router.put("/cart/update", isLoggedIn, asyncWrap(cartController.editCart));
 
 router.delete("/cart/:foodId", isLoggedIn, asyncWrap(cartController.deleteItemFromCart));
 
-router.get("/checkout", asyncWrap(cartController.renderCheckout));
+router.get("/checkout", isLoggedIn, asyncWrap(cartController.renderCheckout));
+
+router.post("/checkout/pay", isLoggedIn, asyncWrap(cartController.createCheckoutSession));
+
+router.get("/checkout/success", isLoggedIn, asyncWrap(cartController.checkoutSuccess));
+router.get("/checkout/cancel", isLoggedIn, asyncWrap(cartController.checkoutCancel));
 
 module.exports = router;
