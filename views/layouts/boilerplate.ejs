@@ -17,21 +17,30 @@
 
     
     <div id="mobileBottomNav">
-    <a href="/tastebite" class="bottomNavItem active">
+    <button type="button" class="bottomNavItem active" id="mobileSearchBtn">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
         <span>Browse</span>
-    </a>
+    </button>
     <a href="/tastebite/orders" class="bottomNavItem">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v4H4zM4 12h16v8H4z"/></svg>
         <span>Orders</span>
     </a>
-    <div id="bottomNavCart" class="bottomNavItem">
+    <a href="/tastebite/cart" id="bottomNavCart" class="bottomNavItem">
         <div id="bottomCartIconWrap">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
             <span id="bottomCartBadge">3</span>
         </div>
         <span>Cart</span>
+    </a>
     </div>
+
+    <div id="mobileSearchOverlay">
+        <form method="GET" action="/tastebite/search" id="mobileSearchForm">
+            <input type="search" name="q" id="mobileSearchInput"
+                    placeholder="Search food or restaurants" autocomplete="off" required>
+            <button type="submit" id="mobileSearchSubmit">Search</button>
+            <button type="button" id="mobileSearchClose" aria-label="Close">&times;</button>
+        </form>
     </div>
 
 <!-- 

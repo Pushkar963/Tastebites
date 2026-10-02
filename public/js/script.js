@@ -317,30 +317,58 @@ document.addEventListener("DOMContentLoaded", () => {
 })
 
 
-document.querySelector("#cartPageItems").addEventListener("click", (e) => {
-    
-    const isPlus = e.target.classList.contains("qtyPlusBtn");
-    const isMinus = e.target.classList.contains("qtyMinusBtn");
+//  Mobile Search Overlay
+// ---------- Mobile search overlay ----------
+const mobileSearchBtn = document.getElementById("mobileSearchBtn");
+const mobileSearchOverlay = document.getElementById("mobileSearchOverlay");
+const mobileSearchInput = document.getElementById("mobileSearchInput");
+const mobileSearchClose = document.getElementById("mobileSearchClose");
 
-    if (isPlus || isMinus) {
-        const cartItem = e.target.closest(".cartPageItem")
-        const foodId = cartItem.dataset.id;
+function openMobileSearch() {
+  mobileSearchOverlay.classList.add("open");
+  setTimeout(() => mobileSearchInput.focus(), 250); // wait for the slide animation
+}
+function closeMobileSearch() {
+  mobileSearchOverlay.classList.remove("open");
+  mobileSearchInput.blur();
+}
 
-        const action = isPlus ? "increase" : "decrease";
+if (mobileSearchBtn && mobileSearchOverlay) {
+  mobileSearchBtn.addEventListener("click", openMobileSearch);
+  mobileSearchClose.addEventListener("click", closeMobileSearch);
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeMobileSearch();
+  });
+}
 
-        fetch("/tastebite/cart/update", {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ foodId, action }),
-        })
-        .then(res => res.json())
-        .then(data => {
-            console.log("Success:", data);
-            if (data.success) {
-                window.location.reload(); // Refreshes page to show new database state
-            }
-        })
-        .catch(err => console.error("Error:", err));
+const cartPageItems = document.querySelector("#cartPageItems");
+
+if (cartPageItems) {
+    cartPageItems.addEventListener("click", (e) => {
         
-    }
-})
+        const isPlus = e.target.classList.contains("qtyPlusBtn");
+        const isMinus = e.target.classList.contains("qtyMinusBtn");
+    
+        if (isPlus || isMinus) {
+            const cartItem = e.target.closest(".cartPageItem")
+            const foodId = cartItem.dataset.id;
+    
+            const action = isPlus ? "increase" : "decrease";
+    
+            fetch("/tastebite/cart/update", {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ foodId, action }),
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log("Success:", data);
+                if (data.success) {
+                    window.location.reload(); // Refreshes page to show new database state
+                }
+            })
+            .catch(err => console.error("Error:", err));
+            
+        }
+    })
+}

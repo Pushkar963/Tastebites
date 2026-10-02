@@ -3804,6 +3804,53 @@ body { padding-bottom: 66px; }
     .shelfNavBtn {
         display: none;
     }
+
+    #mobileSearchOverlay {
+    display: block;
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    padding: 12px;
+    background: var(--stone-50, #fff);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-100%);
+    transition: transform 0.25s ease;
+    z-index: 1000;
+  }
+  #mobileSearchOverlay.open { transform: translateY(0); }
+
+  #mobileSearchForm { display: flex; gap: 8px; align-items: center; }
+  #mobileSearchInput {
+    flex: 1;
+    padding: 10px 14px;
+    border: 1px solid var(--stone-200);
+    border-radius: var(--radius-md);
+    font-size: 16px; /* 16px stops iOS from zooming on focus */
+  }
+  #mobileSearchSubmit {
+    padding: 10px 14px;
+    background: var(--orange-500);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+  }
+  #mobileSearchClose {
+    background: none; border: none;
+    font-size: 26px; color: var(--stone-500);
+  }
+
+  #mobileSearchBtn {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font: inherit;          /* use the page font instead of the button default */
+    /* color: inherit;         use the nav's text color */
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+    -webkit-tap-highlight-color: transparent;  /* removes the grey flash on mobile taps */
+  }
 }
 
 
