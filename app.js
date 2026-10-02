@@ -20,6 +20,7 @@ const menuItemsRouter = require("./routes/menuItem.js");
 const reviewsRouter = require("./routes/reviews.js");
 const userRouter = require("./routes/user.js");
 const cartRouter = require("./routes/cart.js");
+const searchRouter = require("./routes/search.js");
 
 const User = require("./models/user.js");
 const { getRelativeTime } = require("./utils/dateFormatter.js");
@@ -80,6 +81,7 @@ passport.deserializeUser(User.deserializeUser());
 
 async function main() {
     await mongoose.connect(dbURL);
+    console.log("Seeding ->", mongoose.connection.host, "| db:", mongoose.connection.name);
 }
 
 main()
@@ -102,6 +104,7 @@ app.use((req, res, next) => {
 
 app.use("/tastebite",  userRouter);
 app.use("/tastebite", cartRouter);
+app.use("/tastebite", searchRouter);
 app.use("/tastebite/restaurants/:restaurantId/foods", menuItemsRouter);
 app.use("/tastebite/restaurants/:restaurantId/reviews", reviewsRouter);
 app.use("/tastebite/restaurants", restaurantRouter);

@@ -299,11 +299,15 @@ a { text-decoration: none; color: inherit; }
 /* =========================================================
    HERO / SURPLUS BANNER
    ========================================================= */
+#heroBannerWrapper { position: relative; overflow: hidden; border-radius: var(--radius-xl); box-shadow: var(--shadow-lg); }
 
-#heroBanner {
-  position: relative;
-  overflow: hidden;
-  border-radius: var(--radius-xl);
+#heroBannerTrack {
+  display: flex;
+  transition: transform 0.5s ease;
+}
+
+.heroSlide {
+  flex: 0 0 100%;
   background: linear-gradient(90deg, var(--orange-500), var(--orange-500), var(--emerald-600));
   color: #fff;
   padding: 28px;
@@ -312,84 +316,36 @@ a { text-decoration: none; color: inherit; }
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  box-shadow: var(--shadow-lg);
 }
 
-#heroBanner::before,
-#heroBanner::after {
-  content: "";
+.heroSlide.slide2 { background: linear-gradient(90deg, var(--emerald-600), var(--emerald-500), var(--orange-500)); }
+.heroSlide.slide3 { background: linear-gradient(90deg, var(--stone-900), var(--stone-800), var(--orange-500)); }
+.heroSlide.slide4 { background: linear-gradient(90deg, var(--orange-600), var(--amber-400), var(--orange-500)); }
+
+#heroDots {
   position: absolute;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.1);
-}
-
-#heroBanner::before { width: 160px; height: 160px; top: -32px; right: -32px; }
-#heroBanner::after  { width: 96px;  height: 96px;  bottom: -20px; right: 60px; }
-
-#heroIcon {
-  width: 44px;
-  height: 44px;
-  border-radius: var(--radius-md);
-  background: rgba(255,255,255,0.2);
-  flex-shrink: 0;
-  position: relative;
-  z-index: 1;
-}
-
-#heroText {
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
-  flex-direction: column;
-  gap: 2px;
-  position: relative;
+  gap: 6px;
   z-index: 1;
-  max-width: 480px;
 }
 
-#heroTag {
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--orange-100);
-}
-
-#heroTitle {
-  font-size: 24px;
-  font-weight: 800;
-  line-height: 1.2;
-}
-
-#heroSubtitle {
-  font-size: 14px;
-  color: rgba(255,255,255,0.9);
-  margin-top: 4px;
-}
-
-#heroTimer {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: rgba(255,255,255,0.15);
-  border: 1px solid rgba(255,255,255,0.3);
-  padding: 10px 16px;
-  border-radius: var(--radius-md);
-  backdrop-filter: blur(4px);
-  flex-shrink: 0;
-}
-
-.timerIcon {
-  width: 14px;
-  height: 14px;
+.heroDot {
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
-  border: 2px solid #fff;
+  background: rgba(255,255,255,0.4);
+  cursor: pointer;
 }
 
-.timerText {
-  font-size: 14px;
-  font-weight: 700;
-}
+.heroDot.active { background: #fff; width: 18px; border-radius: var(--radius-full); }
+
+.heroText { display: flex; flex-direction: column; gap: 2px; position: relative; z-index: 1; max-width: 480px; }
+.heroTag { font-size: 11px; font-weight: 800; letter-spacing: 0.15em; text-transform: uppercase; color: var(--orange-100); }
+.heroTitle { font-size: 24px; font-weight: 800; line-height: 1.2; color: #fff; }
+.heroSubtitle { font-size: 14px; color: rgba(255,255,255,0.9); margin-top: 4px; }
 
 /* =========================================================
    CATEGORY FILTER BAR

@@ -1,0 +1,102 @@
+<% layout("/layouts/boilerplate") %>
+
+<body>
+    <div id="content">
+
+        <div id="searchResultsHeader">
+            <% if (query && query.trim()) { %>
+                <div class="sectionHeader">Results for "<%= query %>"</div>
+                <div class="searchResultsCount">
+                    <%= foods.length + restaurants.length %> result<%= (foods.length + restaurants.length) === 1 ? '' : 's' %> found
+                </div>
+            <% } else { %>
+                <div class="sectionHeader">Search TasteBites</div>
+            <% } %>
+        </div>
+
+        <% if (query && query.trim() && foods.length === 0 && restaurants.length === 0) { %>
+            <div id="searchEmptyState">
+                <div class="cartEmptyText">No matches for "<%= query %>". Try a different dish or restaurant name.</div>
+            </div>
+        <% } %>
+
+        <!-- ============ RESTAURANTS ============ -->
+        <% if (restaurants.length > 0) { %>
+        <div id="restaurants">
+            <div class="shelfHead">
+                <div class="sectionHeader">Restaurants</div>
+            </div>
+
+            <div class="shelf">
+                <div class="shelfCards">
+                    <% for(restaurant of restaurants) { %>
+                        <a href="/tastebite/restaurants/<%= restaurant._id %>" class="restaurantCard">
+                            <div class="restaurantImage">
+                                <img src="<%= restaurant.imageURL.url %>" alt="">
+                                <div class="restaurantRatingBadge">
+                                    <span class="starIcon"></span> <%= restaurant.rating %>
+                                </div>
+                                <div class="restaurantImageOverlay">
+                                    <div class="restaurantNameOnImage"><%= restaurant.name %></div>
+                                </div>
+                            </div>
+                            <div class="restaurantInfo">
+                                <div class="restaurantInfoRow">
+                                    <span class="restaurantCuisine">
+                                        <% for(cuisine of restaurant.cuisines){ %>
+                                            <%= cuisine %>
+                                            <% if(restaurant.cuisines.indexOf(cuisine) < restaurant.cuisines.length - 1) {%>
+                                                <span>•</span>
+                                            <% } %>
+                                        <% } %>
+                                    </span>
+                                </div>
+                            </div>
+                        </a>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+        <% } %>
+
+        <!-- ============ FOODS ============ -->
+        <% if (foods.length > 0) { %>
+        <div id="foods">
+            <div class="shelfHead">
+                <div id="shelfTitle">Dishes</div>
+            </div>
+
+            <div class="shelf">
+                <div class="shelfCardsFoods">
+                    <% for(food of foods){ %>
+                        <button class="foodCard" data-id="<%= food._id %>">
+                            <div class="foodImage">
+                                <img src="<%= food.imageUrl %>" alt="<%= food.name %>">
+                                <div class="quickAddBtn">+</div>
+                            </div>
+                            <div class="foodCardContent">
+                                <div class="foodName"><%= food.name %></div>
+                                <div class="foodRestaurant"><%= food.restaurantId.name %></div>
+                                <div class="foodPriceRow">
+                                    <% if (food.discountedPrice) {%>
+                                        <span style="text-decoration: line-through; font-size: small;">$<%= food.price %></span>
+                                        <span class="foodPrice">$<%= food.discountedPrice %></span>
+                                    <% } else {%>
+                                        <span class="foodPrice">$<%= food.price %></span>
+                                    <% } %>
+                                </div>
+                            </div>
+                        </button>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+        <% } %>
+
+    </div>
+
+    <script>
+        const menuItems = <%- JSON.stringify(foods) %>;
+    </script>
+
+</body>

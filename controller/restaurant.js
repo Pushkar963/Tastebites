@@ -30,6 +30,7 @@ module.exports.showRestaurant = async (req, res) => {
     const restaurant = await Restaurant.findById(`${id}`).populate("ownerId");
     const foods = await Menu.find({restaurantId: id}).populate("restaurantId");
     const reviews = await Review.find({restaurantId: id}).populate("reviewerName").sort({ createdAt: -1 });
+    
     if (!restaurant) {
         req.flash("error", "Restaurant doesn't exist");
         return res.redirect("/tastebite");

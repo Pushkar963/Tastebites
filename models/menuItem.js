@@ -65,5 +65,6 @@ const menuItemSchema = new Schema({
 
 menuItemSchema.index({restaurantId: 1});
 menuItemSchema.index({isPerishable: 1, isAvailable: 1});
+menuItemSchema.index({name: "text", category: "text"});
 
 module.exports = mongoose.model("MenuItem", menuItemSchema);

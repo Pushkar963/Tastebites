@@ -15,15 +15,17 @@
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin preview-icon"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>
                     </span>
                     <span class="locationLabel">Deliver to</span>
-                    <span class="locationAddress">Baker Street 24</span>
+                    <span class="locationAddress"><%= currUser ? currUser.address.streetAddress : '' %></span>
                 </div>
 
-                <div id="searchBar">
-                    <span class="searchIcon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search preview-icon"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-                    </span>
-                    <input type="text" id="searchInput" placeholder="Craving something? Search dishes or restaurants...">
-                </div>
+                <!-- <div id="searchBar"> -->
+                    <form action="/tastebite/search" method="GET" id="searchBar">
+                        <span class="searchIcon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search preview-icon"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                        </span>
+                        <input type="text" name="q" id="searchInput" placeholder="Craving something? Search dishes or restaurants..."  value="<%= typeof query !== 'undefined' ? query : '' %>">
+                    </form>
+                <!-- </div> -->
             </div>
 
             <div id="section2">

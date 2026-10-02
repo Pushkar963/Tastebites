@@ -1,3 +1,23 @@
+// Hero Banner Slide
+const track = document.getElementById("heroBannerTrack");
+const dots = document.querySelectorAll(".heroDot");
+const totalSlides = dots.length;
+let currentSlide = 0;
+
+function goToSlide(index) {
+  currentSlide = index;
+  track.style.transform = `translateX(-${index * 100}%)`;
+  dots.forEach((dot, i) => dot.classList.toggle("active", i === index));
+}
+
+dots.forEach((dot, i) => dot.addEventListener("click", () => goToSlide(i)));
+
+setInterval(() => {
+  goToSlide((currentSlide + 1) % totalSlides);
+}, 5000);
+
+
+// Food Card Pop up logic
 let cards = document.querySelectorAll(".foodCard");
 let resDetailsPop = document.querySelector("#foodDetailModal");
 let popUpCloseBtn = document.querySelector("#foodDetailCloseBtn");

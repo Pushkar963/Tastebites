@@ -1,45 +1,32 @@
-const mongoose = require("mongoose");
-const { ObjectId } = mongoose.Types;
+// ownerId is NOT set here. init/index.js assigns it from the users created
+// at the same index (restaurant 1 -> user 1, restaurant 2 -> user 2, ...).
+// So keep this order unchanged.
+
+const img = (id) => ({
+  filename: "restaurantImage",
+  url: `https://images.unsplash.com/${id}?w=800&q=80`,
+});
 
 const sampleRestaurants = [
   {
-    ownerId: new ObjectId("6a7cac86b8bdc1999360801e"),
     name: "Malibu Coastal Kitchen",
     cuisines: ["American", "Seafood"],
-    imageURL: {
-      filename: "restaurantImage",
-      url: "https://images.unsplash.com/photo-1515003197210-e0cd71810b5f",
-    },
+    imageURL: img("photo-1515003197210-e0cd71810b5f"),
     description: "A relaxed coastal restaurant serving fresh seafood, grilled dishes, and classic American favorites.",
-    address: {
-      streetAddress: "123 Ocean Avenue",
-      city: "Malibu",
-      pincode: "90265",
-      landmark: "Near Malibu Beach",
-    },
+    address: { streetAddress: "123 Ocean Avenue", city: "Malibu", pincode: "90265", landmark: "Near Malibu Beach" },
     phoneNumber: "+1-310-555-1001",
-    email: "contact@malibcoastalkitchen.com",
+    email: "contact@malibucoastalkitchen.com",
     rating: 4.6,
     numRatings: 184,
     isOpen: true,
     isActive: true,
   },
-
   {
-    ownerId: new ObjectId("6a7cac86b8bdc1999360801f"),
     name: "Broadway Spice House",
     cuisines: ["Indian", "Chinese", "Thai"],
-    imageURL: {
-      filename: "restaurantImage",
-      url: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4",
-    },
+    imageURL: img("photo-1517248135467-4c7edcad34c4"),
     description: "A vibrant restaurant offering flavorful Asian cuisine with a modern dining experience.",
-    address: {
-      streetAddress: "45 Broadway",
-      city: "New York City",
-      pincode: "10006",
-      landmark: "Near Wall Street",
-    },
+    address: { streetAddress: "45 Broadway", city: "New York City", pincode: "10006", landmark: "Near Wall Street" },
     phoneNumber: "+1-212-555-1002",
     email: "hello@broadwayspicehouse.com",
     rating: 4.4,
@@ -47,22 +34,12 @@ const sampleRestaurants = [
     isOpen: true,
     isActive: true,
   },
-
   {
-    ownerId: new ObjectId("6a7cac86b8bdc19993608020"),
     name: "Mountain Hearth",
     cuisines: ["American", "Italian"],
-    imageURL: {
-      filename: "restaurantImage",
-      url: "https://images.unsplash.com/photo-1552566626-52f8b828add9",
-    },
+    imageURL: img("photo-1552566626-52f8b828add9"),
     description: "A cozy mountain restaurant serving hearty meals, handmade pasta, and wood-fired specialties.",
-    address: {
-      streetAddress: "78 Mountain Road",
-      city: "Aspen",
-      pincode: "81611",
-      landmark: "Near Aspen Mountain",
-    },
+    address: { streetAddress: "78 Mountain Road", city: "Aspen", pincode: "81611", landmark: "Near Aspen Mountain" },
     phoneNumber: "+1-970-555-1003",
     email: "info@mountainhearth.com",
     rating: 4.7,
@@ -70,22 +47,12 @@ const sampleRestaurants = [
     isOpen: true,
     isActive: true,
   },
-
   {
-    ownerId: new ObjectId("6a7cac86b8bdc19993608021"),
     name: "La Tavola Fiorentina",
     cuisines: ["Italian"],
-    imageURL: {
-      filename: "restaurantImage",
-      url: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5",
-    },
+    imageURL: img("photo-1555396273-367ea4eb4db5"),
     description: "Traditional Florentine dining featuring handmade pasta, authentic sauces, and classic Italian desserts.",
-    address: {
-      streetAddress: "12 Via Roma",
-      city: "Florence",
-      pincode: "50121",
-      landmark: "Near Piazza della Signoria",
-    },
+    address: { streetAddress: "12 Via Roma", city: "Florence", pincode: "50121", landmark: "Near Piazza della Signoria" },
     phoneNumber: "+39-055-555-1004",
     email: "contact@latavolafiorentina.com",
     rating: 4.8,
@@ -93,22 +60,12 @@ const sampleRestaurants = [
     isOpen: true,
     isActive: true,
   },
-
   {
-    ownerId: new ObjectId("6a7cac86b8bdc19993608022"),
     name: "Forest & Fork",
     cuisines: ["American", "Mexican"],
-    imageURL: {
-      filename: "restaurantImage",
-      url: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4",
-    },
+    imageURL: img("photo-1517248135467-4c7edcad34c4"),
     description: "A casual neighborhood restaurant serving fresh comfort food, burgers, tacos, and refreshing drinks.",
-    address: {
-      streetAddress: "89 Forest Avenue",
-      city: "Portland",
-      pincode: "97205",
-      landmark: "Near Washington Park",
-    },
+    address: { streetAddress: "89 Forest Avenue", city: "Portland", pincode: "97205", landmark: "Near Washington Park" },
     phoneNumber: "+1-503-555-1005",
     email: "hello@forestandfork.com",
     rating: 4.3,
@@ -116,22 +73,12 @@ const sampleRestaurants = [
     isOpen: true,
     isActive: true,
   },
-
   {
-    ownerId: new ObjectId("6a7cac86b8bdc19993608023"),
     name: "Caribbean Breeze",
     cuisines: ["Mexican", "Seafood"],
-    imageURL: {
-      filename: "restaurantImage",
-      url: "https://images.unsplash.com/photo-1515003197210-e0cd71810b5f",
-    },
+    imageURL: img("photo-1515003197210-e0cd71810b5f"),
     description: "A tropical restaurant offering fresh seafood, Mexican-inspired dishes, and refreshing island flavors.",
-    address: {
-      streetAddress: "56 Avenida Kukulkan",
-      city: "Cancun",
-      pincode: "77500",
-      landmark: "Near Hotel Zone",
-    },
+    address: { streetAddress: "56 Avenida Kukulkan", city: "Cancun", pincode: "77500", landmark: "Near Hotel Zone" },
     phoneNumber: "+52-998-555-1006",
     email: "info@caribbeanbreeze.com",
     rating: 4.5,
@@ -139,22 +86,12 @@ const sampleRestaurants = [
     isOpen: true,
     isActive: true,
   },
-
   {
-    ownerId: new ObjectId("6a7cac86b8bdc19993608024"),
     name: "Lakeside Grill",
     cuisines: ["American", "BBQ"],
-    imageURL: {
-      filename: "restaurantImage",
-      url: "https://images.unsplash.com/photo-1544025162-d76694265947",
-    },
+    imageURL: img("photo-1544025162-d76694265947"),
     description: "A scenic grill serving smoky barbecue, grilled meats, burgers, and hearty sides.",
-    address: {
-      streetAddress: "34 Lakeview Drive",
-      city: "Lake Tahoe",
-      pincode: "96145",
-      landmark: "Near Lake Tahoe",
-    },
+    address: { streetAddress: "34 Lakeview Drive", city: "Lake Tahoe", pincode: "96145", landmark: "Near Lake Tahoe" },
     phoneNumber: "+1-775-555-1007",
     email: "contact@lakesidegrill.com",
     rating: 4.6,
@@ -162,22 +99,12 @@ const sampleRestaurants = [
     isOpen: true,
     isActive: true,
   },
-
   {
-    ownerId: new ObjectId("6a7cac86b8bdc19993608025"),
     name: "Hollywood Bites",
     cuisines: ["American", "Mexican", "Fast Food"],
-    imageURL: {
-      filename: "restaurantImage",
-      url: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38",
-    },
+    imageURL: img("photo-1565299624946-b28f40a0ae38"),
     description: "A lively restaurant serving burgers, loaded fries, tacos, and popular American comfort food.",
-    address: {
-      streetAddress: "210 Sunset Boulevard",
-      city: "Los Angeles",
-      pincode: "90028",
-      landmark: "Near Hollywood",
-    },
+    address: { streetAddress: "210 Sunset Boulevard", city: "Los Angeles", pincode: "90028", landmark: "Near Hollywood" },
     phoneNumber: "+1-213-555-1008",
     email: "hello@hollywoodbites.com",
     rating: 4.2,
@@ -185,22 +112,12 @@ const sampleRestaurants = [
     isOpen: true,
     isActive: true,
   },
-
   {
-    ownerId: new ObjectId("6a7cac86b8bdc19993608026"),
     name: "Alpine Table",
     cuisines: ["Swiss", "Italian", "French"],
-    imageURL: {
-      filename: "restaurantImage",
-      url: "https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c",
-    },
+    imageURL: img("photo-1550966871-3ed3cdb5ed0c"),
     description: "A charming alpine restaurant serving European comfort food with mountain-inspired flavors.",
-    address: {
-      streetAddress: "25 Alpine Road",
-      city: "Verbier",
-      pincode: "1936",
-      landmark: "Near Verbier Ski Resort",
-    },
+    address: { streetAddress: "25 Alpine Road", city: "Verbier", pincode: "1936", landmark: "Near Verbier Ski Resort" },
     phoneNumber: "+41-21-555-1009",
     email: "info@alpinetable.com",
     rating: 4.7,
@@ -208,22 +125,12 @@ const sampleRestaurants = [
     isOpen: true,
     isActive: true,
   },
-
   {
-    ownerId: new ObjectId("6a7cac86b8bdc19993608027"),
     name: "Savanna Kitchen",
     cuisines: ["African", "BBQ"],
-    imageURL: {
-      filename: "restaurantImage",
-      url: "https://images.unsplash.com/photo-1544025162-d76694265947",
-    },
+    imageURL: img("photo-1544025162-d76694265947"),
     description: "A unique dining experience featuring African-inspired dishes, grilled meats, and local flavors.",
-    address: {
-      streetAddress: "17 Safari Lane",
-      city: "Serengeti National Park",
-      pincode: "23100",
-      landmark: "Near Serengeti Visitor Centre",
-    },
+    address: { streetAddress: "17 Safari Lane", city: "Serengeti National Park", pincode: "23100", landmark: "Near Serengeti Visitor Centre" },
     phoneNumber: "+255-27-555-1010",
     email: "contact@savannakitchen.com",
     rating: 4.5,
@@ -231,22 +138,12 @@ const sampleRestaurants = [
     isOpen: true,
     isActive: true,
   },
-
   {
-    ownerId: new ObjectId("6a7cac86b8bdc19993608028"),
     name: "Canal Bistro",
     cuisines: ["Dutch", "European", "French"],
-    imageURL: {
-      filename: "restaurantImage",
-      url: "https://images.unsplash.com/photo-1514933651103-005eec06c04b",
-    },
+    imageURL: img("photo-1514933651103-005eec06c04b"),
     description: "A stylish European bistro offering modern Dutch dishes and classic continental cuisine.",
-    address: {
-      streetAddress: "88 Canal Street",
-      city: "Amsterdam",
-      pincode: "1012",
-      landmark: "Near Dam Square",
-    },
+    address: { streetAddress: "88 Canal Street", city: "Amsterdam", pincode: "1012", landmark: "Near Dam Square" },
     phoneNumber: "+31-20-555-1011",
     email: "hello@canalbistro.com",
     rating: 4.4,
@@ -254,22 +151,12 @@ const sampleRestaurants = [
     isOpen: true,
     isActive: true,
   },
-
   {
-    ownerId: new ObjectId("6a7cac86b8bdc19993608029"),
     name: "Island Spice",
     cuisines: ["Fijian", "Seafood", "Asian"],
-    imageURL: {
-      filename: "restaurantImage",
-      url: "https://images.unsplash.com/photo-1515003197210-e0cd71810b5f",
-    },
+    imageURL: img("photo-1515003197210-e0cd71810b5f"),
     description: "A tropical island restaurant specializing in fresh seafood and flavorful Pacific-inspired dishes.",
-    address: {
-      streetAddress: "10 Island Road",
-      city: "Fiji",
-      pincode: "679",
-      landmark: "Near Nadi Bay",
-    },
+    address: { streetAddress: "10 Island Road", city: "Fiji", pincode: "679", landmark: "Near Nadi Bay" },
     phoneNumber: "+679-555-1012",
     email: "info@islandspice.com",
     rating: 4.6,
@@ -277,22 +164,12 @@ const sampleRestaurants = [
     isOpen: true,
     isActive: true,
   },
-
   {
-    ownerId: new ObjectId("6a7cac86b8bdc1999360802a"),
     name: "Cotswold Country Kitchen",
     cuisines: ["British", "European"],
-    imageURL: {
-      filename: "restaurantImage",
-      url: "https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c",
-    },
+    imageURL: img("photo-1550966871-3ed3cdb5ed0c"),
     description: "A traditional British restaurant serving comforting country-style meals and classic desserts.",
-    address: {
-      streetAddress: "42 Cotswold Lane",
-      city: "Cotswolds",
-      pincode: "GL54",
-      landmark: "Near Bourton-on-the-Water",
-    },
+    address: { streetAddress: "42 Cotswold Lane", city: "Cotswolds", pincode: "GL54", landmark: "Near Bourton-on-the-Water" },
     phoneNumber: "+44-20-555-1013",
     email: "hello@cotswoldcountrykitchen.com",
     rating: 4.7,
@@ -300,22 +177,12 @@ const sampleRestaurants = [
     isOpen: true,
     isActive: true,
   },
-
   {
-    ownerId: new ObjectId("6a7cac86b8bdc1999360802b"),
     name: "Beacon Street Café",
     cuisines: ["American", "Cafe", "Bakery"],
-    imageURL: {
-      filename: "restaurantImage",
-      url: "https://images.unsplash.com/photo-1554118811-1e0d58224f24",
-    },
+    imageURL: img("photo-1554118811-1e0d58224f24"),
     description: "A cozy café serving freshly brewed coffee, sandwiches, pastries, and light meals.",
-    address: {
-      streetAddress: "76 Beacon Street",
-      city: "Boston",
-      pincode: "02108",
-      landmark: "Near Boston Common",
-    },
+    address: { streetAddress: "76 Beacon Street", city: "Boston", pincode: "02108", landmark: "Near Boston Common" },
     phoneNumber: "+1-617-555-1014",
     email: "contact@beaconstreetcafe.com",
     rating: 4.5,
@@ -323,22 +190,12 @@ const sampleRestaurants = [
     isOpen: true,
     isActive: true,
   },
-
   {
-    ownerId: new ObjectId("6a7cac86b8bdc1999360802c"),
     name: "Bali Garden",
     cuisines: ["Indonesian", "Asian", "Seafood"],
-    imageURL: {
-      filename: "restaurantImage",
-      url: "https://images.unsplash.com/photo-1515003197210-e0cd71810b5f",
-    },
+    imageURL: img("photo-1515003197210-e0cd71810b5f"),
     description: "A tropical garden restaurant serving authentic Indonesian dishes and fresh seafood.",
-    address: {
-      streetAddress: "21 Beach Road",
-      city: "Bali",
-      pincode: "80361",
-      landmark: "Near Seminyak Beach",
-    },
+    address: { streetAddress: "21 Beach Road", city: "Bali", pincode: "80361", landmark: "Near Seminyak Beach" },
     phoneNumber: "+62-361-555-1015",
     email: "hello@baligarden.com",
     rating: 4.8,
@@ -346,22 +203,12 @@ const sampleRestaurants = [
     isOpen: true,
     isActive: true,
   },
-
   {
-    ownerId: new ObjectId("6a7cac86b8bdc1999360802d"),
     name: "Banff Mountain Grill",
     cuisines: ["Canadian", "American", "BBQ"],
-    imageURL: {
-      filename: "restaurantImage",
-      url: "https://images.unsplash.com/photo-1544025162-d76694265947",
-    },
+    imageURL: img("photo-1544025162-d76694265947"),
     description: "A mountain-themed restaurant serving grilled meats, burgers, and hearty Canadian favorites.",
-    address: {
-      streetAddress: "63 Mountain Avenue",
-      city: "Banff",
-      pincode: "T1L",
-      landmark: "Near Banff National Park",
-    },
+    address: { streetAddress: "63 Mountain Avenue", city: "Banff", pincode: "T1L", landmark: "Near Banff National Park" },
     phoneNumber: "+1-403-555-1016",
     email: "info@banffmountaingrill.com",
     rating: 4.6,
@@ -369,22 +216,12 @@ const sampleRestaurants = [
     isOpen: true,
     isActive: true,
   },
-
   {
-    ownerId: new ObjectId("6a7cac86b8bdc1999360802e"),
     name: "Ocean Drive Kitchen",
     cuisines: ["American", "Seafood", "Mexican"],
-    imageURL: {
-      filename: "restaurantImage",
-      url: "https://images.unsplash.com/photo-1515003197210-e0cd71810b5f",
-    },
+    imageURL: img("photo-1515003197210-e0cd71810b5f"),
     description: "A vibrant Miami restaurant offering fresh seafood, tacos, grilled dishes, and tropical drinks.",
-    address: {
-      streetAddress: "95 Ocean Drive",
-      city: "Miami",
-      pincode: "33139",
-      landmark: "Near South Beach",
-    },
+    address: { streetAddress: "95 Ocean Drive", city: "Miami", pincode: "33139", landmark: "Near South Beach" },
     phoneNumber: "+1-305-555-1017",
     email: "hello@oceandrivekitchen.com",
     rating: 4.3,
@@ -392,22 +229,12 @@ const sampleRestaurants = [
     isOpen: true,
     isActive: true,
   },
-
   {
-    ownerId: new ObjectId("6a7cac86b8bdc1999360802f"),
     name: "Phuket Thai Garden",
     cuisines: ["Thai", "Asian", "Seafood"],
-    imageURL: {
-      filename: "restaurantImage",
-      url: "https://images.unsplash.com/photo-1552566626-52f8b828add9",
-    },
+    imageURL: img("photo-1552566626-52f8b828add9"),
     description: "An authentic Thai restaurant serving aromatic curries, noodles, seafood, and traditional Thai dishes.",
-    address: {
-      streetAddress: "38 Tropical Road",
-      city: "Phuket",
-      pincode: "83110",
-      landmark: "Near Patong Beach",
-    },
+    address: { streetAddress: "38 Tropical Road", city: "Phuket", pincode: "83110", landmark: "Near Patong Beach" },
     phoneNumber: "+66-76-555-1018",
     email: "contact@phuketthaigarden.com",
     rating: 4.7,
@@ -415,22 +242,12 @@ const sampleRestaurants = [
     isOpen: true,
     isActive: true,
   },
-
   {
-    ownerId: new ObjectId("6a7cac86b8bdc19993608030"),
     name: "Highland Hearth",
     cuisines: ["Scottish", "British", "European"],
-    imageURL: {
-      filename: "restaurantImage",
-      url: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5",
-    },
+    imageURL: img("photo-1555396273-367ea4eb4db5"),
     description: "A traditional Scottish restaurant serving hearty regional dishes and classic British comfort food.",
-    address: {
-      streetAddress: "15 Highland Road",
-      city: "Scottish Highlands",
-      pincode: "PH33",
-      landmark: "Near Loch Ness",
-    },
+    address: { streetAddress: "15 Highland Road", city: "Scottish Highlands", pincode: "PH33", landmark: "Near Loch Ness" },
     phoneNumber: "+44-145-555-1019",
     email: "info@highlandhearth.com",
     rating: 4.6,
@@ -438,22 +255,12 @@ const sampleRestaurants = [
     isOpen: true,
     isActive: true,
   },
-
   {
-    ownerId: new ObjectId("6a7cac86b8bdc19993608031"),
     name: "Desert Rose Kitchen",
     cuisines: ["Arabic", "Middle Eastern", "Mediterranean"],
-    imageURL: {
-      filename: "restaurantImage",
-      url: "https://images.unsplash.com/photo-1515003197210-e0cd71810b5f",
-    },
+    imageURL: img("photo-1515003197210-e0cd71810b5f"),
     description: "A modern Middle Eastern restaurant offering grilled meats, mezze, rice dishes, and traditional desserts.",
-    address: {
-      streetAddress: "72 Desert Road",
-      city: "Dubai",
-      pincode: "00000",
-      landmark: "Near Downtown Dubai",
-    },
+    address: { streetAddress: "72 Desert Road", city: "Dubai", pincode: "00000", landmark: "Near Downtown Dubai" },
     phoneNumber: "+971-4-555-1020",
     email: "hello@desertrosekitchen.com",
     rating: 4.5,
