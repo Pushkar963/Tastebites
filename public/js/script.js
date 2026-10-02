@@ -1,3 +1,37 @@
+// shelf Nav buttons
+// ---------- Shelf arrows (reusable for any horizontal row) ----------
+function setupShelf(shelfId, prevId, nextId) {
+  const shelf = document.getElementById(shelfId);
+  const prev = document.getElementById(prevId);
+  const next = document.getElementById(nextId);
+  if (!shelf || !prev || !next) return; // page doesn't have this shelf
+
+  const step = () => shelf.clientWidth * 0.8; // scroll about one screenful
+
+  prev.addEventListener("click", () => {
+    shelf.scrollBy({ left: -step(), behavior: "smooth" });
+  });
+  next.addEventListener("click", () => {
+    shelf.scrollBy({ left: step(), behavior: "smooth" });
+  });
+
+  // Dim an arrow when there is nothing more to scroll in that direction
+  const updateArrows = () => {
+    const maxScroll = shelf.scrollWidth - shelf.clientWidth;
+    prev.classList.toggle("disabled", shelf.scrollLeft <= 1);
+    next.classList.toggle("disabled", shelf.scrollLeft >= maxScroll - 1);
+  };
+
+  shelf.addEventListener("scroll", updateArrows);
+  window.addEventListener("resize", updateArrows);
+  window.addEventListener("load", updateArrows); // images/fonts can change widths
+  updateArrows();
+}
+
+setupShelf("restaurantShelf", "restaurantsPrevBtn", "restaurantsNextBtn");
+
+
+
 // Hero Banner Slide
 const track = document.getElementById("heroBannerTrack");
 const dots = document.querySelectorAll(".heroDot");

@@ -44,7 +44,8 @@ module.exports.showRestaurant = async (req, res) => {
     let avgRating = reviews.length > 0 ? Math.floor((sumRating / reviews.length) * 10) / 10 : 0;
     let avgStar = Math.floor(avgRating);
 
-    res.render("restaurant", {restaurant, foods, reviews, avgRating, avgStar});
+    const isRestaurantOwner = req.user && restaurant.ownerId.equals(req.user._id);
+    res.render("restaurant", {restaurant, foods, reviews, avgRating, avgStar, isRestaurantOwner});
 }
 
 

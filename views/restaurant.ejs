@@ -123,7 +123,9 @@
             <div class="shelfHead">
                 <div class="sectionHeader small">Recommended (12)</div>
                 <div class="menuHeadActions">
-                    <a href="/tastebite/restaurants/<%= restaurant._id %>/foods/new" id="addFoodBtn">+ Add Food</a>
+                    <% if (currUser && isRestaurantOwner) { %>
+                        <a href="/tastebite/restaurants/<%= restaurant._id %>/foods/new" id="addFoodBtn">+ Add Food</a>
+                    <% } %>
                     <div class="collapseArrow">&and;</div>
                 </div>
             </div>
