@@ -1,3 +1,5 @@
+<% const isAdminUser = typeof currUser !== "undefined" && currUser && currUser.role === "ADMIN"; %>
+
 <!-- ================= HEADER ================= -->
     <div id="header">
 
@@ -36,8 +38,10 @@
                     <button id="signupBtn">Sign up</button> -->
                     <a href="/tastebite/login" id="loginBtn">Log in</a>
                     <a href="/tastebite/signup" id="signupBtn">Sign up</a>
-                    <% } else { %>
-                    
+                    <% } else { %>                 
+                        <% if (isAdminUser) { %>
+                            <a href="/tastebite/admin" id="adminLinkBtn">Admin</a>
+                        <% } %>
                         <form action="/tastebite/logout" method="POST" id="logoutForm">
                             <button type="submit" id="logoutBtn">Log out</button>
                         </form>
@@ -53,6 +57,11 @@
 
 
                 <div id="mobileHeaderActions">
+                    <% if (isAdminUser) { %>
+                        <a href="/tastebite/admin" id="adminIconBtn" aria-label="Admin panel" title="Admin panel">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+                        </a>
+                    <% } %>
                     <a href="/tastebite/login" id="accountIconBtn" aria-label="Account">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
                     </a>

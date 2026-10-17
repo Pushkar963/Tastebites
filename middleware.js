@@ -4,6 +4,7 @@ const menuItemSchema = require("./schemas/menuItemSchema.js");    // joi validat
 const restaurantSchema = require("./schemas/restaurantSchema.js");   // joi validation
 const reviewSchema = require("./schemas/reviewSchema.js"); // joi validation
 const ExpressError = require("./utils/ExpressError.js");
+const crypto = require("crypto");
 
 module.exports.isLoggedIn = (req, res, next) => {
     if (!req.isAuthenticated()) {
@@ -14,6 +15,13 @@ module.exports.isLoggedIn = (req, res, next) => {
     next();
 }
 
+module.exports.isAdmin = (req, res, next) => {
+    if (!req.user || req.user.role !== "ADMIN") {
+        req.flash("error", "Admins only.");
+        return res.redirect("/tastebite");
+    }
+    next();
+};
 
 // since passports resets req.session after the access of /login route and receiving the success message from the passport.authenticate(), therefore we save it to the locals, and locals are those variable which are accessible everywhere
 
@@ -96,3 +104,24 @@ module.exports.isReviewAuthor = async (req, res, next) => {
     }
     next();
 }
+
+module.exports.csrfProtection = (req, res, next) => {
+    // 1) every session gets one random token
+    if (!req.session.csrfToken) {
+        req.session.csrfToken = crypto.randomBytes(32).toString("hex");
+    }
+    res.locals.csrfToken = req.session.csrfToken;
+
+    // 2) reading pages never changes data: skip
+    if (["GET", "HEAD", "OPTIONS"].includes(req.method)) return next();
+
+    // 3) compare the token that was sent with the one in the session
+    const sent = (req.body && req.body._csrf) || req.query._csrf || req.get("x-csrf-token") || "";
+    const a = Buffer.from(String(sent));
+    const b = Buffer.from(req.session.csrfToken);
+
+    if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) {
+        return next(new ExpressError(403, "This page expired or the request was not valid. Refresh the page and try again."));
+    }
+    next();
+};

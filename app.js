@@ -13,6 +13,7 @@ const { MongoStore } = require("connect-mongo");
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
+const helmet = require("helmet");
 
 const indexRouter = require("./routes/index.js");
 const restaurantRouter = require("./routes/restaurant.js");
@@ -21,10 +22,15 @@ const reviewsRouter = require("./routes/reviews.js");
 const userRouter = require("./routes/user.js");
 const cartRouter = require("./routes/cart.js");
 const searchRouter = require("./routes/search.js");
+const adminRouter = require("./routes/admin.js");
+const { csrfProtection } = require("./middleware.js");
+
 
 const User = require("./models/user.js");
 const { getRelativeTime } = require("./utils/dateFormatter.js");
 const ExpressError = require("./utils/ExpressError.js");
+
+
 
 
 const app = express();
@@ -40,6 +46,13 @@ app.use(express.json());
 app.use(methodOverride("_method"));
 app.engine("ejs", ejsMate);
 
+
+app.set("trust proxy", 1);          // needed on Render (behind a proxy)
+app.use(helmet({
+    contentSecurityPolicy: false,   // turn on later, carefully (Cloudinary, Stripe, fonts)
+}));
+
+
 const store = MongoStore.create({
     mongoUrl: dbURL,
     crypto: {
@@ -49,7 +62,7 @@ const store = MongoStore.create({
 });
 
 
-store.on("error", () => {
+store.on("error", (err) => {
     console.log("ERROR in MONGO SESSION STORE", err);
 });
 
@@ -58,10 +71,12 @@ const sessionOptions = {
     store,
     secret: process.env.SECRET,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     cookie: {
-        expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+        // expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
         maxAge: 1000 * 60 * 60 * 24 * 7,
+        sameSite: "lax",
+        secure: process.env.NODE_ENV === "production",
         httpOnly: true,      // used to prevent Cross Scripting Attacks
     }
 };
@@ -71,6 +86,7 @@ const sessionOptions = {
 
 app.use(session(sessionOptions));
 app.use(flash());
+app.use(csrfProtection);
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -81,7 +97,6 @@ passport.deserializeUser(User.deserializeUser());
 
 async function main() {
     await mongoose.connect(dbURL);
-    console.log("Seeding ->", mongoose.connection.host, "| db:", mongoose.connection.name);
 }
 
 main()
@@ -105,6 +120,7 @@ app.use((req, res, next) => {
 app.use("/tastebite",  userRouter);
 app.use("/tastebite", cartRouter);
 app.use("/tastebite", searchRouter);
+app.use("/tastebite/admin", adminRouter);
 app.use("/tastebite/restaurants/:restaurantId/foods", menuItemsRouter);
 app.use("/tastebite/restaurants/:restaurantId/reviews", reviewsRouter);
 app.use("/tastebite/restaurants", restaurantRouter);
@@ -118,10 +134,16 @@ app.use((req, res, next) => {
 
 // Central error handling for all types of errors
 app.use((err, req, res, next) => {
-    let { statusCode=500, message="Something Unexpected happened" } = err;
-    // res.status(statusCode).send(message);
+    const statusCode = err.statusCode || 500;
+    console.error(err);                       // full details stay in the server log
+
+    // only errors we created ourselves are safe to show to users
+    const showReal = err instanceof ExpressError || process.env.NODE_ENV !== "production";
+    const message = showReal ? err.message : "Something went wrong. Please try again.";
+
     res.status(statusCode).render("error", { statusCode, message });
 });
+
 
 app.listen(port, () => {
     console.log(`Server started on port ${port}`);

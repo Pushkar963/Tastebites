@@ -36,6 +36,15 @@ module.exports.showRestaurant = async (req, res) => {
         return res.redirect("/tastebite");
     }
 
+    const canSeeInactive =
+    req.user &&
+    (req.user.role === "ADMIN" ||
+        (restaurant.ownerId && restaurant.ownerId.equals(req.user._id)));
+
+    if (!restaurant.isActive && !canSeeInactive) {
+        throw new ExpressError(404, "Page Not Found");
+    }
+
     let sumRating = 0;
     for (let review of reviews) {
         sumRating = sumRating + review.rating;
@@ -81,3 +90,25 @@ module.exports.deleteRestaurant = async (req, res) => {
     console.log(deletedRestaurant);
     res.redirect("/tastebite");
 }
+
+module.exports.setOwnStatus = async (req, res) => {
+    const { id } = req.params;
+    const isActive = req.body.isActive === "true";
+
+    const restaurant = await Restaurant.findById(id);
+    if (!restaurant) throw new ExpressError(404, "Restaurant not found.");
+
+    // An admin suspension can only be lifted by an admin
+    if (isActive && restaurant.suspendedByAdmin) {
+        req.flash("error", "This restaurant was suspended by an admin. Only an admin can reactivate it.");
+        return res.redirect(`/tastebite/restaurants/${id}`);
+    }
+
+    await Restaurant.findByIdAndUpdate(id, { isActive });
+
+    req.flash(
+        "success",
+        isActive ? "Your restaurant is live again." : "Your restaurant is now hidden from customers."
+    );
+    res.redirect(`/tastebite/restaurants/${id}`);
+};

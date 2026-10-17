@@ -2,7 +2,9 @@
 
     <!-- ================= CONTENT ================= -->
     <div id="menuContent">
-
+        <% if (!restaurant.isActive) { %>
+            <div class="inactiveBanner">This restaurant is currently deactivated and hidden from customers.</div>
+        <% } %>
         <!-- Breadcrumb -->
         <div id="breadcrumb">
             <a href="/tastebite" class="crumb">Home</a>

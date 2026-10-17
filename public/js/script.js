@@ -297,8 +297,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 // The options object: settings telling the browser how to send the request.
                 fetch("/tastebite/cart/add", {
                     method: "POST", 
-                    headers: {"Content-Type": "application/json"},
-                    body: JSON.stringify(payload),
+                    headers: {
+                      "Content-Type": "application/json",
+                      "X-CSRF-Token": window.csrfToken,
+                    },
+                    body: JSON.stringify(payload),  
                 })
                 .then(response => response.json())
                 .then(data => {
@@ -357,7 +360,10 @@ if (cartPageItems) {
     
             fetch("/tastebite/cart/update", {
                 method: "PUT",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-Token": window.csrfToken,
+                },
                 body: JSON.stringify({ foodId, action }),
             })
             .then(res => res.json())

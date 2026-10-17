@@ -1,7 +1,7 @@
 const Cart = require("../models/cart.js");
 const Menu = require("../models/menuItem.js");
 const Order = require("../models/order.js");
-
+const Restaurant = require("../models/restaurant.js");   // add at the top of the file
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 module.exports.showCart = async (req, res) => {
@@ -33,6 +33,11 @@ module.exports.addToCart = async (req, res) => {
 
         if (!menuItem) {
             return res.status(404).json({ error: "Item is not available" });
+        }
+        
+        const restaurant = await Restaurant.findById(menuItem.restaurantId);
+        if (!restaurant || !restaurant.isActive) {
+            return res.status(404).json({ error: "This restaurant is not available right now." });
         }
 
         let cart = await Cart.findOne({ userId: req.user._id });
@@ -168,6 +173,12 @@ module.exports.renderCheckout = async (req, res) => {
             return res.redirect("/tastebite/cart");
         }
 
+        const restaurant = await Restaurant.findById(cart.restaurantId);
+        if (!restaurant || !restaurant.isActive) {
+            req.flash("error", "This restaurant is no longer available. Please remove these items from your cart.");
+            return res.redirect("/tastebite/cart");
+        }
+
         // 2. Re-verify every item still exists and is available
         const unavailableItems = [];
         for (const item of cart.items) {
@@ -225,7 +236,6 @@ module.exports.renderCheckout = async (req, res) => {
     }
 };
 
-
 module.exports.createCheckoutSession = async (req, res) => {
     try {
         const cart = await Cart.findOne({ userId: req.user._id }).populate("items.menuItemId");
@@ -234,6 +244,14 @@ module.exports.createCheckoutSession = async (req, res) => {
             req.flash("error", "Your cart is empty.");
             return res.redirect("/tastebite/cart");
         }
+
+        // --- ADD THIS CHECK HERE (Prevents bypassing the checkout page) ---
+        const restaurant = await Restaurant.findById(cart.restaurantId);
+        if (!restaurant || !restaurant.isActive) {
+            req.flash("error", "This restaurant is no longer available. Please remove these items from your cart.");
+            return res.redirect("/tastebite/cart");
+        }
+        // -----------------------------------------------------------------
 
         const line_items = cart.items.map((item) => {
             const menuItem = item.menuItemId;
@@ -276,7 +294,6 @@ module.exports.createCheckoutSession = async (req, res) => {
         res.redirect("/tastebite/cart");
     }
 };
-
 
 module.exports.checkoutSuccess = async (req, res) => {
     try {

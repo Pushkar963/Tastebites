@@ -1,0 +1,41 @@
+<% layout("/layouts/boilerplate") %>
+
+<div id="adminContent">
+    <%- include("../includes/adminNav.ejs") %>
+
+    <div class="sectionHeader">Dashboard</div>
+
+    <div class="statGrid">
+        <a href="/tastebite/admin/users" class="statCard">
+            <div class="statLabel">Total Users</div>
+            <div class="statValue"><%= stats.totalUsers %></div>
+        </a>
+
+        <a href="/tastebite/admin/restaurants" class="statCard">
+            <div class="statLabel">Restaurants</div>
+            <div class="statValue"><%= stats.totalRestaurants %></div>
+            <div class="statSub"><%= stats.activeRestaurants %> active · <%= stats.inactiveRestaurants %> inactive</div>
+        </a>
+
+        <div class="statCard">
+            <div class="statLabel">Menu Items</div>
+            <div class="statValue"><%= stats.totalMenuItems %></div>
+        </div>
+
+        <div class="statCard">
+            <div class="statLabel">Orders</div>
+            <div class="statValue"><%= stats.totalOrders %></div>
+        </div>
+
+        <div class="statCard">
+            <div class="statLabel">Reviews</div>
+            <div class="statValue"><%= stats.totalReviews %></div>
+        </div>
+
+        <div class="statCard">
+            <div class="statLabel">Revenue</div>
+            <div class="statValue money">$<%= stats.revenue.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) %></div>
+            <div class="statSub">Completed payments only</div>
+        </div>
+    </div>
+</div>

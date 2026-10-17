@@ -23,7 +23,7 @@ router.route("/:id")
 
 router.get("/:id/edit", isLoggedIn, isOwner, asyncWrap (restaurantController.renderEditRestaurantForm));
 
-
+router.patch("/:id/status", isLoggedIn, isOwner, asyncWrap(restaurantController.setOwnStatus));
 
 
 

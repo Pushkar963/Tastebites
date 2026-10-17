@@ -90,7 +90,12 @@ const restaurantSchema = new Schema({
     isActive: {        // toggled by TasteBite Super Admin (for the cases of business administration)
         type: Boolean,
         default: true
-    }
+    },
+    
+    suspendedByAdmin: {      // true when an ADMIN deactivated it → only an admin can reactivate
+        type: Boolean,
+        default: false,
+    },
 }, {
     timestamps: true,  
 });

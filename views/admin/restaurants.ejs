@@ -1,0 +1,66 @@
+<% layout("/layouts/boilerplate") %>
+
+<div id="adminContent">
+    <%- include("../includes/adminNav.ejs") %>
+
+    <div class="adminPageHead">
+        <div class="sectionHeader">Restaurants</div>
+        <div class="adminCount"><%= restaurants.length %> total</div>
+    </div>
+
+    <% if (restaurants.length === 0) { %>
+        <div class="adminEmpty">No restaurants yet.</div>
+    <% } else { %>
+        <div class="tableWrap">
+            <table class="adminTable">
+                <thead>
+                    <tr>
+                        <th>Restaurant</th>
+                        <th>Owner</th>
+                        <th>City</th>
+                        <th>Status</th>
+                        <th>Created</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for (let r of restaurants) { %>
+                        <tr>
+                            <td>
+                                <a href="/tastebite/restaurants/<%= r._id %>" class="adminLink"><%= r.name %></a>
+                            </td>
+                            <td data-label="Owner"><%= r.ownerId ? r.ownerId.username : "Unknown" %></td>
+                            <td data-label="City"><%= r.address?.city || "—" %></td>
+                            <td data-label="Status">
+                                <span class="adminBadge <%= r.isActive ? 'active' : (r.suspendedByAdmin ? 'suspended' : 'paused') %>">
+                                    <%= r.isActive ? "Active" : (r.suspendedByAdmin ? "Suspended" : "Paused by owner") %>
+                                </span>
+                            </td>
+                            <td class="mutedCell" data-label="Created"><%= getRelativeTime(r.createdAt) %></td>
+                            <td>
+                                <div class="adminActions">
+                                    <form action="/tastebite/admin/restaurants/<%= r._id %>/status?_method=PATCH" method="POST"
+                                    data-confirm="<%= r.isActive ? 'Hide “' + r.name + '” from customers?' : '' %>" data-confirm-tone="danger">
+                                        <input type="hidden" name="isActive" value="<%= r.isActive ? 'false' : 'true' %>">
+                                        <button type="submit" class="adminBtn <%= r.isActive ? '' : 'primary' %>">
+                                            <%= r.isActive ? "Deactivate" : "Activate" %>
+                                        </button>
+                                    </form>
+
+                                    <form action="/tastebite/admin/restaurants/<%= r._id %>?_method=DELETE" method="POST"
+                                        data-confirm="Permanently delete “<%= r.name %>” with all its menu items and reviews? This cannot be undone."
+                                        data-confirm-word="DELETE"
+                                        data-confirm-tone="danger">
+                                        <button type="submit" class="adminBtn danger">Delete</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    <% } %>
+</div>
+<%- include("../includes/confirmModal.ejs") %>
+<script src="/js/admin.js"></script>

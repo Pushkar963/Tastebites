@@ -1,0 +1,58 @@
+<% layout("/layouts/boilerplate") %>
+
+<div id="adminContent">
+    <%- include("../includes/adminNav.ejs") %>
+
+    <div class="adminPageHead">
+        <div class="sectionHeader">Users</div>
+        <div class="adminCount"><%= users.length %> total</div>
+    </div>
+
+    <% if (users.length === 0) { %>
+        <div class="adminEmpty">No users yet.</div>
+    <% } else { %>
+        <div class="tableWrap">
+            <table class="adminTable">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Joined</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for (let u of users) { %>
+                        <tr>
+                            <td><strong><%= u.username %></strong></td>
+                            <td data-label="Email"><%= u.email %></td>
+                            <td data-label="Role">
+                                <span class="adminBadge <%= u.role === 'ADMIN' ? 'roleAdmin' : 'roleUser' %>">
+                                    <%= u.role %>
+                                </span>
+                            </td>
+                            <td class="mutedCell" data-label="Joined"><%= getRelativeTime(u.createdAt) %></td>
+                            <td>
+                                <% if (u._id.equals(currUser._id)) { %>
+                                    <span class="youTag">You</span>
+                                <% } else { %>
+                                    <form action="/tastebite/admin/users/<%= u._id %>/role?_method=PATCH" method="POST"
+                                          data-confirm="<%= u.role === 'ADMIN' ? 'Remove admin access from this user?' : 'Give this user full admin access?' %>"
+                                          data-confirm-tone="<%= u.role === 'ADMIN' ? 'danger' : '' %>">
+                                        <input type="hidden" name="role" value="<%= u.role === 'ADMIN' ? 'USER' : 'ADMIN' %>">
+                                        <button type="submit" class="adminBtn <%= u.role === 'ADMIN' ? 'danger' : '' %>">
+                                            <%= u.role === 'ADMIN' ? 'Remove admin' : 'Make admin' %>
+                                        </button>
+                                    </form>
+                                <% } %>
+                            </td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    <% } %>
+</div>
+<%- include("../includes/confirmModal.ejs") %>
+<script src="/js/admin.js"></script>

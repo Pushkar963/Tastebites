@@ -141,11 +141,25 @@
 
         <div id="dangerZone">
             <div id="dangerZoneTitle">Danger Zone</div>
-            <div id="dangerZoneText">Deleting a restaurant is permanent and cannot be undone.</div>
 
-            <form action="/tastebite/restaurants/<%= restaurant._id %>?_method=DELETE" method="POST" onsubmit="return confirm('Are you sure you want to delete this restaurant? This cannot be undone.');">
-                <button type="submit" id="deleteRestaurantBtn">Delete Restaurant</button>
-            </form>
+            <% if (restaurant.suspendedByAdmin) { %>
+                <div id="dangerZoneText">This restaurant was suspended by an admin and is hidden from customers. Only an admin can reactivate it.</div>
+
+            <% } else if (restaurant.isActive) { %>
+                <div id="dangerZoneText">Deactivating hides your restaurant, its menu and reviews from customers. You can reactivate it at any time.</div>
+                <form action="/tastebite/restaurants/<%= restaurant._id %>/status?_method=PATCH" method="POST"
+                    onsubmit="return confirm('Hide this restaurant from customers?');">
+                    <input type="hidden" name="isActive" value="false">
+                    <button type="submit" id="deleteRestaurantBtn">Deactivate Restaurant</button>
+                </form>
+
+            <% } else { %>
+                <div id="dangerZoneText">Your restaurant is currently hidden from customers.</div>
+                <form action="/tastebite/restaurants/<%= restaurant._id %>/status?_method=PATCH" method="POST">
+                    <input type="hidden" name="isActive" value="true">
+                    <button type="submit" id="reactivateRestaurantBtn">Reactivate Restaurant</button>
+                </form>
+            <% } %>
         </div>
     </div>
 
