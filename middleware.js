@@ -123,5 +123,6 @@ module.exports.csrfProtection = (req, res, next) => {
     if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) {
         return next(new ExpressError(403, "This page expired or the request was not valid. Refresh the page and try again."));
     }
+    if (req.body) delete req.body._csrf;
     next();
 };
