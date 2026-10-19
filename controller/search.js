@@ -1,6 +1,6 @@
 const Restaurant = require("../models/restaurant.js");
 const Menu = require("../models/menuItem.js");
-
+const { getActiveRestaurantIds } = require("../utils/activeRestaurants.js");
 
 module.exports.search = async (req, res) => {
     const { q } = req.query;

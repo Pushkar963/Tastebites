@@ -1,47 +1,87 @@
 <% layout("/layouts/boilerplate") %>
 
-<div class="orderConfirmationContainer">
-    <h1 class="orderConfirmationTitle">Order Confirmed!</h1>
-    <p class="orderConfirmationSubtext">Your order has been placed successfully.</p>
+<% 
+    const itemTotal = order.totalAmount - (order.deliveryFee || 0);
+    const paid = order.paymentStatus === "COMPLETED";
+    const paymentClass = paid ? "paid" : (order.paymentStatus === "FAILED" ? "failed" : "pending");
+    const paymentText = paid ? "Paid" : order.paymentStatus.toLowerCase();
+%>
 
-    <section class="orderConfirmationDetails">
+<div class="orderConfirmationContainer">
+
+    <div class="orderConfirmationHero">
+        <div class="orderConfirmationCheck">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+        </div>
+        <h1 class="orderConfirmationTitle">Order Confirmed!</h1>
+        <p class="orderConfirmationSubtext">Your order has been placed successfully.</p>
+    </div>
+
+    <section class="checkoutCard orderConfirmationDetails">
         <div class="orderConfirmationRow">
             <span class="orderConfirmationLabel">Order ID</span>
-            <span class="orderConfirmationValue"><%= order._id %></span>
+            <span class="orderConfirmationValue mono" title="<%= order._id %>">#<%= order._id.toString().slice(-8).toUpperCase() %></span>
         </div>
         <div class="orderConfirmationRow">
             <span class="orderConfirmationLabel">Status</span>
-            <span class="orderConfirmationValue"><%= order.orderStatus %></span>
+            <span class="orderBadge status"><%= order.orderStatus.replace(/_/g, " ").toLowerCase() %></span>
         </div>
         <div class="orderConfirmationRow">
             <span class="orderConfirmationLabel">Payment</span>
-            <span class="orderConfirmationValue"><%= order.paymentStatus %></span>
+            <span class="orderBadge <%= paymentClass %>"><%= paymentText %></span>
         </div>
     </section>
 
-    <section class="orderConfirmationItemsSection">
+    <section class="checkoutCard orderConfirmationItemsSection">
         <h2 class="checkoutSectionHeading">Items</h2>
         <ul class="checkoutItemList">
             <% order.items.forEach(item => { %>
                 <li class="checkoutItemRow">
-                    <span class="checkoutItemName"><%= item.name %> x<%= item.quantity %></span>
+                    <div class="checkoutItemImage">
+                        <% if (item.imageUrl) { %>
+                            <img src="<%= item.imageUrl %>" alt="" loading="lazy">
+                        <% } %>
+                    </div>
+                    <div class="checkoutItemInfo">
+                        <span class="checkoutItemName"><%= item.name %></span>
+                        <span class="checkoutItemMeta">$<%= item.price.toFixed(2) %> each &middot; Qty <%= item.quantity %></span>
+                    </div>
                     <span class="checkoutItemPrice">$<%= (item.price * item.quantity).toFixed(2) %></span>
                 </li>
             <% }) %>
         </ul>
     </section>
 
-    <section class="orderConfirmationAddressSection">
+    <section class="checkoutCard orderConfirmationAddressSection">
         <h2 class="checkoutSectionHeading">Delivering To</h2>
-        <p class="checkoutAddressText">
-            <%= order.deliveryAddress.streetAddress %>, <%= order.deliveryAddress.city %>, <%= order.deliveryAddress.pincode %>
-        </p>
+        <div class="checkoutAddressBox">
+            <span class="checkoutAddressIcon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>
+            </span>
+            <p class="checkoutAddressText">
+                <%= order.deliveryAddress.streetAddress %>, <%= order.deliveryAddress.city %>, <%= order.deliveryAddress.pincode %>
+                <% if (order.deliveryAddress.landmark) { %>
+                    <br>
+                    <%= order.deliveryAddress.landmark %>
+                <% } %>
+            </p>
+        </div>
     </section>
 
-    <div class="orderConfirmationTotal">
-        <span>Total Paid</span>
-        <span>$<%= order.totalAmount.toFixed(2) %></span>
-    </div>
+    <section class="checkoutCard">
+        <div class="checkoutTotalRow">
+            <span>Item Total</span>
+            <span>$<%= itemTotal.toFixed(2) %></span>
+        </div>
+        <div class="checkoutTotalRow">
+            <span>Delivery Fee</span>
+            <span>$<%= (order.deliveryFee || 0).toFixed(2) %></span>
+        </div>
+        <div class="checkoutTotalRow checkoutGrandTotal orderConfirmationTotal">
+            <span>Total Paid</span>
+            <span>$<%= order.totalAmount.toFixed(2) %></span>
+        </div>
+    </section>
 
     <a href="/tastebite" class="orderConfirmationHomeBtn">Back to Home</a>
 </div>

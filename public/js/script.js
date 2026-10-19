@@ -64,6 +64,8 @@ cards.forEach((card) => {
         resDetailsPop.classList.add("open");
 
         let menuId = card.dataset.id;
+        resDetailsPop.dataset.foodId = menuId;
+        setModalQty(1);
         const menuItem = typeof menuItems !== "undefined" ? menuItems.find(item => item._id === menuId) : null;
 
         if (menuItem) {
@@ -96,6 +98,20 @@ cards.forEach((card) => {
 if (popUpCloseBtn && resDetailsPop) {
     popUpCloseBtn.addEventListener("click", () => {
         resDetailsPop.classList.remove("open");
+    });
+}
+
+const modalAddBtn = document.getElementById("foodDetailAddBtn");
+const qtyMinus = document.getElementById("foodDetailMinus");
+const qtyPlus = document.getElementById("foodDetailPlus");
+if (qtyMinus) qtyMinus.addEventListener("click", () => setModalQty(readQty() - 1));
+if (qtyPlus) qtyPlus.addEventListener("click", () => setModalQty(readQty() + 1));
+
+if (modalAddBtn && resDetailsPop) {
+    modalAddBtn.addEventListener("click", () => {
+        const foodId = resDetailsPop.dataset.foodId;
+        if (!foodId) return;
+        addToCart(foodId, readQty(), modalAddBtn);
     });
 }
 
@@ -272,6 +288,72 @@ document.querySelectorAll(".authTab").forEach(tabEl => {
 });
 
 */
+// ---------- Add to cart (shared by the restaurant page and the food modal) ----------
+function updateCartCount(cart) {
+    if (!cart || !Array.isArray(cart.items)) return;
+    const total = cart.items.reduce((sum, i) => sum + i.quantity, 0);
+    ["cartCount", "bottomCartBadge"].forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = total;
+    });
+}
+
+async function addToCart(foodId, quantity, btn) {
+    const label = btn ? btn.textContent : "";
+    if (btn) { btn.disabled = true; btn.textContent = "Adding…"; }
+
+    try {
+        const res = await fetch("/tastebite/cart/add", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-Token": window.csrfToken,
+            },
+            body: JSON.stringify({ foodId, quantity }),
+        });
+
+        // not logged in: isLoggedIn redirected the request to the login page
+        if (res.redirected) {
+            window.location.href = res.url;
+            return;
+        }
+
+        const data = await res.json();
+
+        if (!res.ok) {                      // 404 / 409 (other restaurant) / 400
+            alert(data.error || "Could not add to cart.");
+            return;
+        }
+
+        updateCartCount(data.cart);
+        if (btn) btn.textContent = "Added ✓";
+    } catch (err) {
+        console.error(err);
+        alert("Something went wrong. Please try again.");
+    } finally {
+        if (btn) setTimeout(() => { btn.disabled = false; btn.textContent = label; }, 1200);
+    }
+}
+
+function readQty() {
+    const el = document.getElementById("foodDetailQty");
+    if (!el) return 1;
+    const n = parseInt(el.value ?? el.textContent, 10);
+    return Number.isInteger(n) ? Math.min(Math.max(n, 1), 20) : 1;
+}
+
+function setModalQty(n) {
+    const qty = document.getElementById("foodDetailQty");
+    const minus = document.getElementById("foodDetailMinus");
+    const plus = document.getElementById("foodDetailPlus");
+    if (!qty) return;
+
+    n = Math.min(Math.max(n, 1), 20);
+    qty.textContent = n;
+    if (minus) minus.disabled = n <= 1;
+    if (plus) plus.disabled = n >= 20;
+}
+
 
 document.addEventListener("DOMContentLoaded", () => {
     const menuList = document.querySelector("#menuList");
@@ -286,31 +368,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 console.log("Food Id: ", foodId);
             
                 // when the add button is clicked, foodId is extracted and packaged into an object
-                const payload = {
-                    foodId: foodId,
-                    quantity: 1, 
-                }
-            
-                // Send it using fetch()
-                // fetch() takes two main arguments:
-                // The URL endpoint: where the backend is listening (/tastebite/cart/add).
-                // The options object: settings telling the browser how to send the request.
-                fetch("/tastebite/cart/add", {
-                    method: "POST", 
-                    headers: {
-                      "Content-Type": "application/json",
-                      "X-CSRF-Token": window.csrfToken,
-                    },
-                    body: JSON.stringify(payload),  
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log("Success: ", data);
-                    alert("Added to cart!");
-                })
-                .catch(error => {
-                    console.error("Error: ", error);
-                });
+                // AFTER (inside if (e.target.classList.contains("addToCartBtn")) { … })
+                addToCart(menuItem.dataset.id, 1, e.target);
         
             }
         
@@ -357,6 +416,7 @@ if (cartPageItems) {
             const foodId = cartItem.dataset.id;
     
             const action = isPlus ? "increase" : "decrease";
+            e.target.disabled = true; 
     
             fetch("/tastebite/cart/update", {
                 method: "PUT",
@@ -373,7 +433,7 @@ if (cartPageItems) {
                     window.location.reload(); // Refreshes page to show new database state
                 }
             })
-            .catch(err => console.error("Error:", err));
+            .catch(err => { console.error("Error:", err); e.target.disabled = false; });
             
         }
     })

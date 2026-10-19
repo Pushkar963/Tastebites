@@ -39,17 +39,34 @@
 
             <!-- Cuisine tags (array field) -->
             <div class="formGroup">
-                <label class="formLabel">Cuisine Type(s)</label>
+                <label class="formLabel" for="cuisineTagField">Cuisine Type(s)</label>
+
                 <div id="cuisineTagInput">
                     <span class="cuisineTagChip">
-                        Pizza <span class="chipRemove">&times;</span>
+                        <span class="chipText">Pizza</span>
+                        <button type="button" class="chipRemove" aria-label="Remove Pizza">&times;</button>
                         <input type="hidden" name="restaurant[cuisines][]" value="Pizza">
                     </span>
                     <span class="cuisineTagChip">
-                        Italian <span class="chipRemove">&times;</span>
+                        <span class="chipText">Italian</span>
+                        <button type="button" class="chipRemove" aria-label="Remove Italian">&times;</button>
                         <input type="hidden" name="restaurant[cuisines][]" value="Italian">
                     </span>
-                    <input type="text" id="cuisineTagField" placeholder="Type a cuisine and press Enter">
+
+                    <input type="text" id="cuisineTagField" placeholder="Type a cuisine, press Enter"
+                        autocomplete="off" maxlength="30">
+                </div>
+
+                <p class="cuisineHint">Press Enter or comma to add. Up to 8 cuisines.</p>
+                <p class="cuisineError" id="cuisineError" role="alert" hidden></p>
+
+                <div id="cuisineSuggestions">
+                    <span class="suggestLabel">Popular:</span>
+                    <button type="button" class="cuisineSuggest" data-cuisine="Pizza">+ Pizza</button>
+                    <button type="button" class="cuisineSuggest" data-cuisine="Burger">+ Burger</button>
+                    <button type="button" class="cuisineSuggest" data-cuisine="Indian">+ Indian</button>
+                    <button type="button" class="cuisineSuggest" data-cuisine="Chinese">+ Chinese</button>
+                    <button type="button" class="cuisineSuggest" data-cuisine="Desserts">+ Desserts</button>
                 </div>
             </div>
 

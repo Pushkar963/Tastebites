@@ -1,0 +1,99 @@
+#cuisineTagInput {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  min-height: 52px;
+  padding: 8px 12px;
+  background: #fff;
+  border: 1px solid var(--stone-200);
+  border-radius: var(--radius-md);
+  cursor: text;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+#cuisineTagInput:focus-within {
+  border-color: var(--orange-400);
+  box-shadow: 0 0 0 3px var(--orange-100);
+}
+
+#cuisineTagInput.hasError { border-color: var(--red-500); }
+
+/* two ids beat your global input styles (this removes the white box) */
+#cuisineTagInput #cuisineTagField {
+  flex: 1;
+  min-width: 160px;
+  border: 0;
+  outline: 0;
+  box-shadow: none;
+  background: transparent;
+  padding: 6px 4px;
+  font: inherit;
+  font-size: 16px;               /* 16px stops iOS zooming in */
+  color: var(--stone-800);
+}
+
+.cuisineTagChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px 4px 12px;
+  background: var(--orange-100);
+  border: 1px solid var(--orange-200);
+  color: var(--orange-600);
+  border-radius: var(--radius-full);
+  font-size: 14px;
+  font-weight: 600;
+  animation: chipIn 0.15s ease;
+}
+
+.chipRemove {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.chipRemove:hover { background: var(--orange-200); }
+.chipRemove:focus-visible { outline: 2px solid var(--orange-500); outline-offset: 1px; }
+
+.cuisineHint { margin: 6px 2px 0; font-size: 12px; color: var(--stone-500); }
+.cuisineError { margin: 6px 2px 0; font-size: 13px; font-weight: 600; color: var(--red-500); }
+.cuisineError[hidden] { display: none; }
+
+#cuisineSuggestions { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 10px; }
+.suggestLabel { font-size: 12px; font-weight: 700; color: var(--stone-500); }
+
+.cuisineSuggest {
+  background: #fff;
+  border: 1px dashed var(--stone-300);
+  color: var(--stone-600);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+
+.cuisineSuggest:hover { border-color: var(--orange-400); color: var(--orange-600); background: var(--orange-50); }
+.cuisineSuggest:focus-visible { outline: 2px solid var(--orange-500); outline-offset: 2px; }
+.cuisineSuggest[hidden] { display: none; }
+
+@keyframes chipIn {
+  from { transform: scale(0.85); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cuisineTagChip { animation: none; }
+}

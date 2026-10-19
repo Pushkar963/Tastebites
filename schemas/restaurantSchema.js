@@ -4,7 +4,7 @@ const restaurantSchema =  Joi.object({
     restaurant : Joi.object({
         imageURL: Joi.string().allow("", null),
         name: Joi.string().required(),
-        cuisines: Joi.array().items(Joi.string().trim().required()).min(1).required(),
+        cuisines: Joi.array().items(Joi.string().trim().max(30)).min(1).max(8).required(),
         description: Joi.string().required(),
         address: Joi.object({
             streetAddress: Joi.string().required(),

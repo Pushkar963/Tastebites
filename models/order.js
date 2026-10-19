@@ -13,6 +13,10 @@ const orderItemSchema = new Schema({
         required: [true, "Item name snapshot is required"],
     },
 
+    imageUrl: {
+        type: String,
+        default: "",
+    },
     // Snapshot of price paid AT THE TIME OF PURCHASE (includes Surplus Hour 50% cut if applicable)
     price: {
         type: Number,

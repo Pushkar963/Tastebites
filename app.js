@@ -23,6 +23,7 @@ const userRouter = require("./routes/user.js");
 const cartRouter = require("./routes/cart.js");
 const searchRouter = require("./routes/search.js");
 const adminRouter = require("./routes/admin.js");
+const Cart = require("./models/cart.js");
 const { csrfProtection } = require("./middleware.js");
 
 
@@ -110,10 +111,16 @@ app.locals.getRelativeTime = getRelativeTime;
 
 
 
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
     res.locals.currUser = req.user;
+
+    res.locals.cartCount = 0;
+    if (req.user) {
+        const cart = await Cart.findOne({ userId: req.user._id }).select("items").lean();
+        res.locals.cartCount = cart ? cart.items.reduce((sum, i) => sum + i.quantity, 0) : 0;
+    }
     next();
 });
 

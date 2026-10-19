@@ -1,8 +1,11 @@
+const mongoose = require("mongoose");
 const Cart = require("../models/cart.js");
 const Menu = require("../models/menuItem.js");
 const Order = require("../models/order.js");
 const Restaurant = require("../models/restaurant.js");   // add at the top of the file
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+const DELIVERY_FEE = 2.99;
+const round2 = (n) => Math.round(n * 100) / 100;
 
 module.exports.showCart = async (req, res) => {
 
@@ -15,9 +18,27 @@ module.exports.showCart = async (req, res) => {
             .populate("restaurantId");
 
 
-        const items = (cart && cart.items) ? cart.items : [];
-        res.render("cart/showCart", { items });
+            const items = (cart && cart.items) ? cart.items : [];
 
+            let itemTotal = 0;
+            let savings = 0;
+            for (const item of items) {
+                const m = item.menuItemId;
+                if (!m) continue;                          // the menu item was deleted
+                const unit = m.discountedPrice ?? m.price;
+                itemTotal += unit * item.quantity;
+                savings += (m.price - unit) * item.quantity;
+            }
+
+            const deliveryFee = items.length ? DELIVERY_FEE : 0;
+            const summary = {
+                itemTotal: round2(itemTotal),
+                deliveryFee,
+                savings: round2(savings),
+                total: round2(itemTotal + deliveryFee),
+            };
+
+            res.render("cart/showCart", { items, summary });
     } catch (error) {
         console.error("Error loading cart:", error);
         res.status(500).send("Server Error");
@@ -28,7 +49,12 @@ module.exports.showCart = async (req, res) => {
 
 module.exports.addToCart = async (req, res) => {
     try {
-        const { foodId, quantity = 1 } = req.body;
+        const { foodId } = req.body;
+        const quantity = Number.parseInt(req.body.quantity ?? 1, 10);
+
+        if (!mongoose.isValidObjectId(foodId) || !Number.isInteger(quantity) || quantity < 1 || quantity > 20) {
+            return res.status(400).json({ error: "Invalid request." });
+        }
         const menuItem = await Menu.findById(foodId);
 
         if (!menuItem) {
@@ -203,6 +229,7 @@ module.exports.renderCheckout = async (req, res) => {
             return {
                 menuItemId: menuItem._id,
                 name: menuItem.name,
+                imageUrl: menuItem.imageUrl,
                 price: unitPrice,
                 quantity: item.quantity,
                 lineTotal,
@@ -336,6 +363,7 @@ module.exports.checkoutSuccess = async (req, res) => {
             return {
                 menuItemId: menuItem._id,
                 name: menuItem.name,
+                imageUrl: menuItem.imageUrl,
                 price: unitPrice,
                 quantity: item.quantity,
             };

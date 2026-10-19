@@ -898,34 +898,6 @@ a { text-decoration: none; color: inherit; }
   color: var(--emerald-700);
 }
 
-.cartItemQty {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: var(--stone-100);
-  border-radius: var(--radius-sm);
-  padding: 4px 10px;
-}
-
-.qtyMinusBtn,
-.qtyPlusBtn {
-  cursor: pointer;
-  font-weight: 800;
-  font-size: 14px;
-  color: var(--stone-600);
-  width: 16px;
-  text-align: center;
-}
-
-.qtyMinusBtn:hover,
-.qtyPlusBtn:hover { color: var(--orange-600); }
-
-.qtyValue {
-  font-size: 14px;
-  font-weight: 700;
-  width: 16px;
-  text-align: center;
-}
 
 #cartSummary {
   border-top: 1px solid var(--stone-100);
@@ -955,6 +927,75 @@ a { text-decoration: none; color: inherit; }
   color: var(--stone-900);
   padding-top: 8px;
   border-top: 1px solid var(--stone-200);
+}
+
+/* ----- Cart page: item image ----- */
+.cartPageItemImage {
+  flex-shrink: 0;
+  width: 88px;
+  height: 88px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--stone-100);
+}
+
+.cartPageItemImage img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ----- Cart page: price ----- */
+.cartPageItemPriceRow { display: flex; align-items: baseline; gap: 8px; }
+.cartPageItemPrice { font-weight: 800; color: var(--stone-900); }
+.cartPageItemOldPrice { font-size: 13px; color: var(--stone-400); text-decoration: line-through; }
+
+/* ----- Cart page: quantity stepper ----- */
+.cartItemQty {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  background: var(--stone-100);
+  border-radius: var(--radius-full);
+}
+
+.qtyMinusBtn,
+.qtyPlusBtn {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+  color: var(--stone-800);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease;
+}
+
+.qtyMinusBtn:hover:not(:disabled),
+.qtyPlusBtn:hover:not(:disabled) { background: var(--orange-100); color: var(--orange-600); }
+
+.qtyMinusBtn:active:not(:disabled),
+.qtyPlusBtn:active:not(:disabled) { transform: scale(0.92); }
+
+.qtyMinusBtn:focus-visible,
+.qtyPlusBtn:focus-visible { outline: 2px solid var(--orange-500); outline-offset: 2px; }
+
+.qtyMinusBtn:disabled,
+.qtyPlusBtn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.qtyValue { min-width: 28px; text-align: center; font-size: 15px; font-weight: 800; color: var(--stone-900); }
+
+@media (max-width: 480px) {
+  .cartPageItemImage { width: 72px; height: 72px; }
 }
 
 #checkoutBtn {
@@ -1840,29 +1881,10 @@ a { text-decoration: none; color: inherit; }
 }
 
 /* Cuisine chip input */
-#cuisineTagInput {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-  border: 1px solid var(--stone-200);
-  border-radius: var(--radius-md);
-  padding: 8px 10px;
-}
 
-.cuisineTagChip {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: var(--orange-100);
-  color: var(--orange-600);
-  font-size: 13px;
-  font-weight: 600;
-  padding: 5px 10px;
-  border-radius: var(--radius-full);
-}
 
-.chipRemove { cursor: pointer; font-weight: 800; }
+
+
 
 #cuisineTagField {
   flex: 1;
@@ -2685,13 +2707,7 @@ Change Image btn
   padding: 14px;
 }
 
-.cartPageItemImage {
-  width: 72px;
-  height: 72px;
-  border-radius: var(--radius-md);
-  flex-shrink: 0;
-  background: linear-gradient(135deg, var(--orange-200), var(--orange-400));
-}
+
 
 .cartPageItemImage.surplus {
   background: linear-gradient(135deg, #fef9c3, var(--amber-400));
@@ -3119,7 +3135,36 @@ a.statCard:hover {
 
 
 
+.modalQtyStepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  background: var(--stone-100);
+  border-radius: var(--radius-full);
+}
 
+.modalQtyBtn {
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+  color: var(--stone-800);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease;
+}
+
+.modalQtyBtn:hover:not(:disabled) { background: var(--orange-100); color: var(--orange-600); }
+.modalQtyBtn:active:not(:disabled) { transform: scale(0.92); }
+.modalQtyBtn:focus-visible { outline: 2px solid var(--orange-500); outline-offset: 2px; }
+.modalQtyBtn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+#foodDetailQty { min-width: 32px; text-align: center; font-size: 16px; font-weight: 800; color: var(--stone-900); }
 
 
 
