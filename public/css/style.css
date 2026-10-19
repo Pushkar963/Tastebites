@@ -132,6 +132,12 @@ a { text-decoration: none; color: inherit; }
   color: #7c2d12;
 }
 
+#brandName a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 #brandName::after {
   content: "";
 }
